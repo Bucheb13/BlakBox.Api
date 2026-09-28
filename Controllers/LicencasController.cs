@@ -19,18 +19,15 @@ public class LicencaController : ControllerBase
     private readonly LicencaDbContext _context;
     private readonly InstalacaoGestaoService _instalacaoService;
     private readonly CredencialInstalacaoService _credencialService;
-    private readonly IConfiguration _configuration;
 
     public LicencaController(
         LicencaDbContext context,
         InstalacaoGestaoService instalacaoService,
-        CredencialInstalacaoService credencialService,
-        IConfiguration configuration)
+        CredencialInstalacaoService credencialService)
     {
         _context = context;
         _instalacaoService = instalacaoService;
         _credencialService = credencialService;
-        _configuration = configuration;
     }
 
     /*
@@ -161,22 +158,9 @@ public class LicencaController : ControllerBase
                         x.SistemaId == sistema.SistemaId &&
                         x.InstalacaoKey == oficinaId);
 
-        var bootstrapTokenValido = ValidarBootstrapToken();
-        var bootstrapTokenConfigurado = !string.IsNullOrWhiteSpace(
-            _configuration["Registration:BootstrapToken"]);
         var chaveInstalacaoValida = false;
 
-        if (instalacao == null && bootstrapTokenConfigurado && !bootstrapTokenValido)
-        {
-            return Unauthorized(new
-            {
-                sucesso = false,
-                codigo = "TOKEN_REGISTRO_INVALIDO",
-                mensagem = "Token de autorização do registro ausente ou inválido."
-            });
-        }
-
-        if (instalacao != null && !bootstrapTokenValido)
+        if (instalacao != null)
         {
             var chaveAtual = Request.Headers["X-Installation-Key"].FirstOrDefault();
             chaveInstalacaoValida = await _credencialService.ValidarChaveAtivaAsync(
@@ -189,7 +173,7 @@ public class LicencaController : ControllerBase
                 {
                     sucesso = false,
                     codigo = "CREDENCIAL_OBRIGATORIA",
-                    mensagem = "Informe a credencial ativa da instalação ou o token de autorização do registro."
+                    mensagem = "Informe a credencial ativa da instalação."
                 });
             }
         }
@@ -543,10 +527,7 @@ public class LicencaController : ControllerBase
 
         var deveCriarNovaCredencial =
             credencial == null ||
-            request.SolicitarNovaCredencial ||
-            (bootstrapTokenValido &&
-             !chaveInstalacaoValida &&
-             Request.Headers.ContainsKey("X-Installation-Key"));
+            request.SolicitarNovaCredencial;
 
         string? chaveInstalacao =
             null;
@@ -1251,19 +1232,6 @@ public class LicencaController : ControllerBase
             hash);
     }
 
-    private bool ValidarBootstrapToken()
-    {
-        var esperado = _configuration["Registration:BootstrapToken"];
-        var recebido = Request.Headers["X-Registration-Token"].FirstOrDefault();
-        if (string.IsNullOrEmpty(esperado) || string.IsNullOrEmpty(recebido))
-        {
-            return false;
-        }
-
-        var esperadoHash = SHA256.HashData(Encoding.UTF8.GetBytes(esperado));
-        var recebidoHash = SHA256.HashData(Encoding.UTF8.GetBytes(recebido));
-        return CryptographicOperations.FixedTimeEquals(esperadoHash, recebidoHash);
-    }
 }
 
 /*

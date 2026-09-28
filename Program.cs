@@ -30,8 +30,7 @@ if (!builder.Environment.IsDevelopment())
     }
 
     RequireSetting(builder.Configuration, "Admin_Username", 1);
-    RequireSetting(builder.Configuration, "Admin_Password", 16);
-    RequireSetting(builder.Configuration, "Registration:BootstrapToken", 32);
+    RequireSetting(builder.Configuration, "Admin_Password", 6);
     var allowedHosts = RequireSetting(builder.Configuration, "AllowedHosts", 1);
     if (allowedHosts.Contains('*'))
     {
@@ -391,4 +390,3 @@ static string RequireSetting(
 
     return value;
 }
-

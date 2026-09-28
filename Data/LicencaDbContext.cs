@@ -33,6 +33,7 @@ public DbSet<CredencialInstalacao> CredenciaisInstalacao =>
     Set<CredencialInstalacao>();
     public DbSet<ApiRequisicao> ApiRequisicoes =>
     Set<ApiRequisicao>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
     {
@@ -446,6 +447,7 @@ modelBuilder.Entity<Licenca>(entity =>
             entity.HasIndex(x => x.Aplicacao);
             entity.HasIndex(x => x.CorrelationId);
         });
+
 
         // ============================================================
         // DATAS - PostgreSQL
