@@ -29,8 +29,8 @@ if (!builder.Environment.IsDevelopment())
             "ConnectionStrings:Default deve ter host, banco, usuário, senha e SSL habilitado.");
     }
 
-    RequireSetting(builder.Configuration, "Admin:Username", 1);
-    RequireSetting(builder.Configuration, "Admin:Password", 16);
+    RequireSetting(builder.Configuration, "Admin_Username", 1);
+    RequireSetting(builder.Configuration, "Admin_Password", 16);
     RequireSetting(builder.Configuration, "Registration:BootstrapToken", 32);
     var allowedHosts = RequireSetting(builder.Configuration, "AllowedHosts", 1);
     if (allowedHosts.Contains('*'))
@@ -128,8 +128,8 @@ builder.Services
         options.SlidingExpiration = true;
         options.Events.OnValidatePrincipal = context =>
         {
-            var configuredPassword = builder.Configuration["Admin:Password"];
-            var configuredUsername = builder.Configuration["Admin:Username"];
+            var configuredPassword = builder.Configuration["Admin_Password"];
+            var configuredUsername = builder.Configuration["Admin_Username"];
             var stampClaim = context.Principal?.FindFirst("admin_security_stamp")?.Value;
             var expectedStamp = configuredPassword == null || configuredUsername == null
                 ? string.Empty

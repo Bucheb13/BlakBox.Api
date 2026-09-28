@@ -25,25 +25,25 @@ public class LoginModel : PageModel
     public string? ErrorMessage { get; private set; }
 
     public bool ConfiguracaoDisponivel =>
-        !string.IsNullOrWhiteSpace(_configuration["Admin:Username"]) &&
-        !string.IsNullOrWhiteSpace(_configuration["Admin:Password"]);
+        !string.IsNullOrWhiteSpace(_configuration["Admin_Username"]) &&
+        !string.IsNullOrWhiteSpace(_configuration["Admin_Password"]);
 
     public void OnGet()
     {
         if (!ConfiguracaoDisponivel)
         {
-            ErrorMessage = "Acesso administrativo ainda não configurado. Em desenvolvimento, execute dotnet user-secrets set para Admin:Username e Admin:Password. Em produção, configure as variáveis secretas do ambiente.";
+            ErrorMessage = "Acesso administrativo ainda não configurado. Em desenvolvimento, execute dotnet user-secrets set para Admin_Username e Admin_Password. Em produção, configure as variáveis secretas do ambiente.";
         }
     }
 
     public async Task<IActionResult> OnPostAsync(string? returnUrl)
     {
-        var expectedUsername = _configuration["Admin:Username"];
-        var expectedPassword = _configuration["Admin:Password"];
+        var expectedUsername = _configuration["Admin_Username"];
+        var expectedPassword = _configuration["Admin_Password"];
         if (string.IsNullOrWhiteSpace(expectedUsername) ||
             string.IsNullOrWhiteSpace(expectedPassword))
         {
-            ErrorMessage = "Acesso administrativo ainda não configurado. Em desenvolvimento, execute dotnet user-secrets set para Admin:Username e Admin:Password. Em produção, configure as variáveis secretas do ambiente.";
+            ErrorMessage = "Acesso administrativo ainda não configurado. Em desenvolvimento, execute dotnet user-secrets set para Admin_Username e Admin_Password. Em produção, configure as variáveis secretas do ambiente.";
             return Page();
         }
 
