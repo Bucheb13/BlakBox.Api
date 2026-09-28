@@ -1,0 +1,633 @@
+@page "/Instalacoes"
+@model BlakBox.Api.Pages.Instalacoes.IndexModel
+
+@{
+    ViewData["Title"] = "Instalações";
+}
+
+<link rel="stylesheet"
+      href="~/css/instalacoes.css"
+      asp-append-version="true" />
+
+<div class="instalacoes">
+
+    <div class="topbar">
+
+        <h1>
+            Painel de Licenciamento
+        </h1>
+
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+
+            <h2>
+                Instalações
+            </h2>
+
+            <div class="subtitle">
+                Gerencie clientes, sistemas, identificadores,
+                credenciais e comunicação das instalações.
+            </div>
+
+        </div>
+
+
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Sucesso"]
+            </div>
+        }
+
+
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Erro"]
+            </div>
+        }
+
+
+        @if (TempData["CredencialNova"] != null)
+        {
+            <div class="alert alert-credencial">
+
+                <div class="credencial-titulo">
+                    ⚠️ NOVA CREDENCIAL GERADA
+                </div>
+
+                <div class="credencial-detalhes">
+
+                    Instalação:
+                    <strong>
+                        @TempData["CredencialNovaInstalacao"]
+                    </strong>
+
+                    <br />
+
+                    Sistema:
+                    <strong>
+                        @TempData["CredencialNovaSistema"]
+                    </strong>
+
+                </div>
+
+                <div class="credencial-chave">
+                    @TempData["CredencialNova"]
+                </div>
+
+                <div class="credencial-aviso">
+                    Copie esta chave agora.
+                    Por segurança, ela não será armazenada em texto
+                    e não será exibida novamente.
+                </div>
+
+            </div>
+        }
+
+
+        <!-- =====================================================
+             NOVA INSTALAÇÃO
+             ===================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3>
+                    Nova instalação
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form method="post"
+                      action="/Instalacoes?handler=Criar">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-grid">
+
+                        <div class="campo">
+
+                            <label>
+                                Cliente
+                            </label>
+
+                            <select name="clienteId"
+                                    class="form-control"
+                                    required>
+
+                                <option value="">
+                                    Selecione
+                                </option>
+
+                                @foreach (var cliente in Model.Clientes)
+                                {
+                                    <option value="@cliente.ClienteId">
+                                        @cliente.Nome
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label>
+                                Sistema
+                            </label>
+
+                            <select name="sistemaId"
+                                    class="form-control"
+                                    required>
+
+                                <option value="">
+                                    Selecione
+                                </option>
+
+                                @foreach (var sistema in Model.Sistemas)
+                                {
+                                    <option value="@sistema.SistemaId">
+                                        @sistema.Nome (@sistema.Codigo)
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label>
+                                Installation Key
+                            </label>
+
+                            <input type="text"
+                                   name="instalacaoKey"
+                                   class="form-control"
+                                   maxlength="50"
+                                   placeholder="EX: OF-JMV3-TAFH-B3S4"
+                                   required />
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label>
+                                Nome da instalação
+                            </label>
+
+                            <input type="text"
+                                   name="nomeInstalacao"
+                                   class="form-control"
+                                   maxlength="150"
+                                   placeholder="Ex: Computador principal" />
+
+                        </div>
+
+
+                        <div>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                Cadastrar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             INSTALAÇÕES CADASTRADAS
+             ===================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3>
+                    Instalações cadastradas
+                </h3>
+
+                <div class="contador">
+                    @Model.Instalacoes.Count instalação(ões)
+                </div>
+
+            </div>
+
+
+            @if (Model.Instalacoes.Count == 0)
+            {
+                <div class="sem-dados">
+                    Nenhuma instalação cadastrada.
+                </div>
+            }
+            else
+            {
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Cliente
+                                </th>
+
+                                <th>
+                                    Sistema
+                                </th>
+
+                                <th>
+                                    Installation Key
+                                </th>
+
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Licenças
+                                </th>
+
+                                <th>
+                                    Credencial
+                                </th>
+
+                                <th>
+                                    Criado em
+                                </th>
+
+                                <th>
+                                    Última comunicação
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var instalacao in Model.Instalacoes)
+                            {
+                                <tr>
+
+                                    <!-- =========================================
+                                         CLIENTE
+                                         ========================================= -->
+
+                                    <td>
+
+                                        <form id="form-salvar-@instalacao.InstalacaoId"
+                                              method="post"
+                                              action="/Instalacoes?handler=Salvar">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="instalacaoId"
+                                                   value="@instalacao.InstalacaoId" />
+
+                                        </form>
+
+
+                                        <span class="form-control" aria-readonly="true">
+                                            @(instalacao.Cliente?.Nome ?? "Cliente não informado")
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         SISTEMA
+                                         ========================================= -->
+
+                                    <td>
+
+                                        <select name="sistemaId"
+                                                class="form-control"
+                                                form="form-salvar-@instalacao.InstalacaoId"
+                                                @(instalacao.Licencas.Count > 0 ? "disabled" : "")>
+
+                                            @foreach (var sistema in Model.Sistemas)
+                                            {
+                                                <option value="@sistema.SistemaId"
+                                                        selected="@(sistema.SistemaId == instalacao.SistemaId)">
+                                                    @sistema.Nome
+                                                </option>
+                                            }
+
+                                        </select>
+
+
+                                        @if (instalacao.Licencas.Count > 0)
+                                        {
+                                            <input type="hidden"
+                                                   name="sistemaId"
+                                                   value="@instalacao.SistemaId"
+                                                   form="form-salvar-@instalacao.InstalacaoId" />
+
+                                            <span class="subtexto">
+                                                Sistema bloqueado após licenciamento.
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         INSTALLATION KEY
+                                         ========================================= -->
+
+                                    <td>
+
+                                        <input type="text"
+                                               name="instalacaoKey"
+                                               value="@instalacao.InstalacaoKey"
+                                               class="form-control"
+                                               maxlength="50"
+                                               @(instalacao.Licencas.Count > 0 ? "readonly" : "")
+                                               form="form-salvar-@instalacao.InstalacaoId" />
+
+
+                                        @if (instalacao.Licencas.Count > 0)
+                                        {
+                                            <span class="subtexto">
+                                                Chave preservada após licenciamento.
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         NOME
+                                         ========================================= -->
+
+                                    <td>
+
+                                        <input type="text"
+                                               name="nomeInstalacao"
+                                               value="@instalacao.NomeInstalacao"
+                                               class="form-control"
+                                               maxlength="150"
+                                               form="form-salvar-@instalacao.InstalacaoId" />
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         STATUS
+                                         ========================================= -->
+
+                                    <td>
+
+                                        @if (instalacao.Ativa)
+                                        {
+                                            <span class="status-badge status-ativo">
+                                                ATIVA
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inativo">
+                                                INATIVA
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         LICENÇAS
+                                         ========================================= -->
+
+                                    <td>
+
+                                        @if (instalacao.Licencas.Count > 0)
+                                        {
+                                            <span class="numero">
+                                                <span class="texto-destaque">
+                                                    @instalacao.Licencas.Count
+                                                </span>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="subtexto">
+                                                Nenhuma
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         CREDENCIAL
+                                         ========================================= -->
+
+                                    <td>
+
+                                        @{
+                                            var credencialAtiva =
+                                                instalacao.Credenciais
+                                                    .FirstOrDefault(x => x.Ativa);
+                                        }
+
+
+                                        @if (credencialAtiva != null)
+                                        {
+                                            <span class="chave">
+                                                ••••••••
+                                                @credencialAtiva.UltimosCaracteres
+                                            </span>
+
+                                            <span class="subtexto">
+                                                Ativa
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="subtexto">
+                                                Nenhuma credencial ativa.
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         CRIADO EM
+                                         ========================================= -->
+
+                                    <td>
+
+                                        <span class="data">
+                                            @instalacao.CriadoEm.ToString(
+                                                "dd/MM/yyyy HH:mm")
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         ÚLTIMA COMUNICAÇÃO
+                                         ========================================= -->
+
+                                    <td>
+
+                                        @if (instalacao.UltimaComunicacao.HasValue)
+                                        {
+                                            <span class="data">
+                                                @instalacao.UltimaComunicacao.Value.ToString(
+                                                    "dd/MM/yyyy HH:mm")
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="subtexto">
+                                                Nunca
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- =========================================
+                                         AÇÕES
+                                         ========================================= -->
+
+                                    <td class="acoes">
+
+                                        <button type="submit"
+                                                class="btn btn-primary"
+                                                form="form-salvar-@instalacao.InstalacaoId">
+
+                                            Salvar
+
+                                        </button>
+
+
+                                        @if (instalacao.Ativa)
+                                        {
+                                            <form method="post"
+                                                  action="/Instalacoes?handler=Status">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="instalacaoId"
+                                                       value="@instalacao.InstalacaoId" />
+
+                                                <input type="hidden"
+                                                       name="ativa"
+                                                       value="false" />
+
+                                                <button type="submit"
+                                                        class="btn btn-danger"
+                                                        onclick="return confirm('Inativar esta instalação? A credencial continuará armazenada, mas não poderá autenticar enquanto a instalação estiver inativa.');">
+
+                                                    Inativar
+
+                                                </button>
+
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post"
+                                                  action="/Instalacoes?handler=Status">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="instalacaoId"
+                                                       value="@instalacao.InstalacaoId" />
+
+                                                <input type="hidden"
+                                                       name="ativa"
+                                                       value="true" />
+
+                                                <button type="submit"
+                                                        class="btn btn-success"
+                                                        onclick="return confirm('Ativar esta instalação?');">
+
+                                                    Ativar
+
+                                                </button>
+
+                                            </form>
+                                        }
+
+
+                                        @if (instalacao.Ativa &&
+                                             instalacao.Sistema.Ativo)
+                                        {
+                                            <form method="post"
+                                                  action="/Instalacoes?handler=GerarCredencial">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="instalacaoId"
+                                                       value="@instalacao.InstalacaoId" />
+
+                                                <button type="submit"
+                                                        class="btn btn-warning"
+                                                        onclick="return confirm('Gerar uma nova credencial? A credencial atual será revogada imediatamente. A nova chave será exibida somente uma vez.');">
+
+                                                    @(credencialAtiva == null
+                                                        ? "Gerar chave"
+                                                        : "Nova chave")
+
+                                                </button>
+
+                                            </form>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,378 @@
+@using System.Security.Claims
+
+@{
+    string Path()
+        => (Context?.Request?.Path.Value ?? "")
+            .TrimEnd('/')
+            .ToLowerInvariant();
+
+    string Norm(string? path)
+        => (path ?? "")
+            .Trim()
+            .TrimEnd('/')
+            .ToLowerInvariant();
+
+    bool IsHere(string href)
+    {
+        var current = Path();
+        var target = Norm(href);
+
+        if (target == "")
+            target = "/";
+
+        return current == target;
+    }
+
+    bool IsAuthenticated =
+        User?.Identity?.IsAuthenticated == true;
+
+    var userName =
+        User?.Identity?.Name
+        ?? User?.FindFirst("name")?.Value
+        ?? User?.FindFirst(ClaimTypes.Name)?.Value
+        ?? User?.FindFirst(ClaimTypes.Email)?.Value
+        ?? "Administrador";
+
+    /*
+     * No momento o painel da API é administrativo.
+     * Mantemos a variável preparada para futuramente
+     * separar permissões por perfil/role.
+     */
+    var isAdmin =
+        IsAuthenticated &&
+        (
+            User?.IsInRole("Admin") == true ||
+            User?.Identity?.IsAuthenticated == true
+        );
+
+    var currentPath = Path();
+}
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <title>
+        @ViewData["Title"] - BlakBox
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="~/css/site.css"
+        asp-append-version="true"
+    />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+
+<body>
+
+    <!-- ========================================================
+         TOPBAR
+         ======================================================== -->
+
+    <header class="topbar">
+
+        <div class="topbar-brand">
+
+            <div class="topbar-logo">
+                <span>BB</span>
+            </div>
+
+            <div class="topbar-brand-text">
+
+                <strong>BlakBox</strong>
+
+                <span>
+                    Central de Licenciamento
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="topbar-user">
+
+            <span class="user-label">
+                Seja bem-vindo,
+            </span>
+
+            <strong>
+                @userName
+            </strong>
+
+        </div>
+
+
+        <!-- MENU MOBILE -->
+
+        <button
+            class="menu-toggle btn secondary"
+            type="button"
+            aria-controls="sidebar"
+            aria-expanded="false">
+
+            <span class="menu-icon">☰</span>
+
+            <span>
+                Menu
+            </span>
+
+        </button>
+
+
+        @if (IsAuthenticated)
+        {
+            <div class="topbar-actions">
+
+                <span class="connection-status">
+
+                    <span class="status-dot"></span>
+
+                    API online
+
+                </span>
+
+                <form method="post" action="/Logout">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn secondary">Sair</button>
+                </form>
+
+            </div>
+        }
+
+    </header>
+
+
+    <!-- ========================================================
+         BACKDROP
+         ======================================================== -->
+
+    <div
+        class="backdrop"
+        id="backdrop"
+        hidden>
+    </div>
+
+
+    <!-- ========================================================
+         LAYOUT
+         ======================================================== -->
+
+    <div class="app-layout">
+
+
+        <!-- ====================================================
+             SIDEBAR
+             ==================================================== -->
+
+        <aside
+            class="sidebar"
+            id="sidebar">
+
+
+            <!-- BRAND -->
+
+            <div class="sidebar-brand">
+
+                <div class="brand-avatar">
+
+                    <span class="brand-mark">
+                        BB
+                    </span>
+
+                </div>
+
+
+                <div class="brand-text">
+
+                    <strong class="brand-name">
+                        BlakBox
+                    </strong>
+
+                    <span class="brand-tag">
+                        Central de Licenciamento
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 NAVEGAÇÃO
+                 ================================================= -->
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-title">
+                    Principal
+                </div>
+
+
+                <a
+                    class="nav-link @(IsHere("/") ? "active" : "")"
+                    href="/">
+
+                    <span class="nav-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    class="nav-link @(IsHere("/Clientes") ? "active" : "")"
+                    href="/Clientes">
+
+                    <span class="nav-icon">
+                        👥
+                    </span>
+
+                    <span>
+                        Clientes
+                    </span>
+
+                </a>
+
+
+                <a
+                    class="nav-link @(IsHere("/Instalacoes") ? "active" : "")"
+                    href="/Instalacoes">
+
+                    <span class="nav-icon">
+                        🖥️
+                    </span>
+
+                    <span>
+                        Instalações
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 LICENCIAMENTO
+                 ================================================= -->
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-title">
+                    Licenciamento
+                </div>
+
+
+                <a
+                    class="nav-link @(IsHere("/Licencas") ? "active" : "")"
+                    href="/Licencas">
+
+                    <span class="nav-icon">
+                        🔑
+                    </span>
+
+                    <span>
+                        Licenças
+                    </span>
+
+                </a>
+
+
+                <a
+                    class="nav-link @(IsHere("/Planos") ? "active" : "")"
+                    href="/Planos">
+
+                    <span class="nav-icon">
+                        💳
+                    </span>
+
+                    <span>
+                        Planos
+                    </span>
+
+                </a>
+
+
+                <a
+                    class="nav-link @(IsHere("/Sistemas") ? "active" : "")"
+                    href="/Sistemas">
+
+                    <span class="nav-icon">
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Sistemas
+                    </span>
+
+                </a>
+
+            </div>
+
+            <!-- =================================================
+                 RODAPÉ DA SIDEBAR
+                 ================================================= -->
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-version">
+
+                    <span>
+                        BlakBox API
+                    </span>
+
+                    <strong>
+                        v1.0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ====================================================
+             CONTEÚDO
+             ==================================================== -->
+
+        <main class="content">
+
+            @RenderBody()
+
+        </main>
+
+    </div>
+
+
+    <!-- ========================================================
+         JAVASCRIPT GLOBAL
+         ======================================================== -->
+
+    <script
+        src="~/js/site.js"
+        asp-append-version="true">
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

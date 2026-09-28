@@ -1,0 +1,526 @@
+@page "/Planos"
+@model BlakBox.Api.Pages.Planos.IndexModel
+
+@{
+    ViewData["Title"] = "Planos";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/planos.css"
+          asp-append-version="true" />
+}
+
+<div class="planos">
+
+    <div class="topbar">
+
+        <div class="topbar-content">
+
+            <div>
+                <div class="topbar-title">
+                    Painel de Licenciamento
+                </div>
+
+                <div class="topbar-subtitle">
+                    Administração dos planos de licença
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+
+            <div>
+
+                <h2>
+                    Planos
+                </h2>
+
+                <div class="subtitle">
+                    Configure os planos disponíveis para cada sistema.
+                </div>
+
+            </div>
+
+        </div>
+
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success">
+                <span class="alert-icon">✓</span>
+
+                <span>
+                    @TempData["Sucesso"]
+                </span>
+            </div>
+        }
+
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger">
+                <span class="alert-icon">!</span>
+
+                <span>
+                    @TempData["Erro"]
+                </span>
+            </div>
+        }
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+                        Novo plano
+                    </h3>
+
+                    <div class="card-subtitle">
+                        Cadastre um plano de licença para um sistema.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <form method="post"
+                      action="/Planos?handler=Criar">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-grid">
+
+                        <div class="campo">
+
+                            <label for="novo-sistema">
+                                Sistema
+                            </label>
+
+                            <select id="novo-sistema"
+                                    name="sistemaId"
+                                    class="form-control"
+                                    required>
+
+                                <option value="">
+                                    Selecione
+                                </option>
+
+                                @foreach (var sistema in Model.Sistemas.Where(x => x.Ativo))
+                                {
+                                    <option value="@sistema.SistemaId">
+                                        @sistema.Nome (@sistema.Codigo)
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="novo-codigo">
+                                Código
+                            </label>
+
+                            <input id="novo-codigo"
+                                   type="text"
+                                   name="codigo"
+                                   class="form-control"
+                                   maxlength="50"
+                                   placeholder="MENSAL"
+                                   required />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="novo-nome">
+                                Nome
+                            </label>
+
+                            <input id="novo-nome"
+                                   type="text"
+                                   name="nome"
+                                   class="form-control"
+                                   maxlength="100"
+                                   placeholder="Mensal"
+                                   required />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="novo-duracao-dias">
+                                Duração em dias
+                            </label>
+
+                            <input id="novo-duracao-dias"
+                                   type="number"
+                                   name="duracaoDias"
+                                   class="form-control"
+                                   min="1"
+                                   max="36500"
+                                   placeholder="31" />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="novo-duracao-meses">
+                                Duração em meses
+                            </label>
+
+                            <input id="novo-duracao-meses"
+                                   type="number"
+                                   name="duracaoMeses"
+                                   class="form-control"
+                                   min="1"
+                                   max="120"
+                                   placeholder="3" />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="novo-valor">
+                                Valor
+                            </label>
+
+                            <input id="novo-valor"
+                                   type="number"
+                                   name="valor"
+                                   class="form-control"
+                                   min="0"
+                                   step="0.01"
+                                   placeholder="0,00" />
+
+                        </div>
+
+                        <div class="campo campo-acao">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                Cadastrar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+                        Planos cadastrados
+                    </h3>
+
+                    <div class="contador">
+                        @Model.Planos.Count plano(s)
+                    </div>
+
+                </div>
+
+            </div>
+
+            @if (Model.Planos.Count == 0)
+            {
+                <div class="sem-dados">
+
+                    <div class="sem-dados-icon">
+                        —
+                    </div>
+
+                    <div class="sem-dados-title">
+                        Nenhum plano cadastrado
+                    </div>
+
+                    <div class="sem-dados-text">
+                        Cadastre o primeiro plano utilizando o formulário acima.
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-container">
+
+                    @foreach (var plano in Model.Planos)
+                    {
+                        <form id="form-status-@plano.PlanoId" method="post" action="/Planos?handler=Status">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="planoId" value="@plano.PlanoId" />
+                            <input type="hidden" name="ativo" value="@(plano.Ativo ? "false" : "true")" />
+                        </form>
+                    }
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Sistema
+                                </th>
+
+                                <th>
+                                    Código
+                                </th>
+
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    Duração
+                                </th>
+
+                                <th>
+                                    Valor
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Licenças
+                                </th>
+
+                                <th>
+                                    Criado em
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var plano in Model.Planos)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <form id="form-salvar-@plano.PlanoId"
+                                              method="post"
+                                              action="/Planos?handler=Salvar">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="planoId"
+                                                   value="@plano.PlanoId" />
+
+                                        </form>
+
+                                        <select name="sistemaId"
+                                                class="form-control"
+                                                form="form-salvar-@plano.PlanoId"
+                                                @(plano.Licencas.Count > 0 ? "disabled" : "")>
+
+                                            @foreach (var sistema in Model.Sistemas)
+                                            {
+                                                <option value="@sistema.SistemaId"
+                                                        selected="@(sistema.SistemaId == plano.SistemaId)">
+                                                    @sistema.Nome
+                                                </option>
+                                            }
+
+                                        </select>
+
+                                        @if (plano.Licencas.Count > 0)
+                                        {
+                                            <input type="hidden"
+                                                   name="sistemaId"
+                                                   value="@plano.SistemaId"
+                                                   form="form-salvar-@plano.PlanoId" />
+
+                                            <span class="subtexto">
+                                                Sistema bloqueado após uso.
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        <input type="text"
+                                               name="codigo"
+                                               value="@plano.Codigo"
+                                               class="form-control"
+                                               maxlength="50"
+                                               form="form-salvar-@plano.PlanoId" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <input type="text"
+                                               name="nome"
+                                               value="@plano.Nome"
+                                               class="form-control"
+                                               maxlength="100"
+                                               form="form-salvar-@plano.PlanoId" />
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (plano.DuracaoDias.HasValue)
+                                        {
+                                            <input type="number"
+                                                   name="duracaoDias"
+                                                   value="@plano.DuracaoDias"
+                                                   class="form-control"
+                                                   min="1"
+                                                   max="36500"
+                                                   form="form-salvar-@plano.PlanoId" />
+
+                                            <input type="hidden"
+                                                   name="duracaoMeses"
+                                                   value=""
+                                                   form="form-salvar-@plano.PlanoId" />
+
+                                            <span class="subtexto">
+                                                dias
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <input type="number"
+                                                   name="duracaoMeses"
+                                                   value="@plano.DuracaoMeses"
+                                                   class="form-control"
+                                                   min="1"
+                                                   max="120"
+                                                   form="form-salvar-@plano.PlanoId" />
+
+                                            <input type="hidden"
+                                                   name="duracaoDias"
+                                                   value=""
+                                                   form="form-salvar-@plano.PlanoId" />
+
+                                            <span class="subtexto">
+                                                meses
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="valor">
+
+                                        <input type="number"
+                                               name="valor"
+                                               value="@(plano.Valor?.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture))"
+                                               class="form-control"
+                                               min="0"
+                                               step="0.01"
+                                               form="form-salvar-@plano.PlanoId" />
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (plano.Ativo)
+                                        {
+                                            <span class="status-badge status-ativo">
+                                                <span class="status-dot"></span>
+                                                ATIVO
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inativo">
+                                                <span class="status-dot"></span>
+                                                INATIVO
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="numero">
+                                        @plano.Licencas.Count
+                                    </td>
+
+                                    <td class="data">
+
+                                        @plano.CriadoEm.ToString(
+                                            "dd/MM/yyyy HH:mm")
+
+                                    </td>
+
+                                    <td class="acoes">
+
+                                        <button type="submit"
+                                                class="btn btn-primary"
+                                                form="form-salvar-@plano.PlanoId">
+
+                                            Salvar
+
+                                        </button>
+
+                                            @if (plano.Ativo)
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-danger"
+                                                        form="form-status-@plano.PlanoId"
+                                                        onclick="return confirm('Inativar este plano? As licenças existentes não serão alteradas, mas o plano não poderá ser usado em novas ativações.');">
+
+                                                    Inativar
+
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-success"
+                                                        form="form-status-@plano.PlanoId"
+                                                        onclick="return confirm('Ativar este plano?');">
+
+                                                    Ativar
+
+                                                </button>
+                                            }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

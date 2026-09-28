@@ -1,0 +1,434 @@
+@page "/Sistemas"
+@model BlakBox.Api.Pages.Sistemas.IndexModel
+
+@{
+    ViewData["Title"] = "Sistemas";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/sistemas.css"
+          asp-append-version="true" />
+}
+
+<div class="sistemas">
+
+    <div class="container">
+
+        <header class="header">
+
+            <div class="header-content">
+
+                <div>
+
+                    <h2>
+                        Sistemas
+                    </h2>
+
+                    <div class="subtitle">
+                        Cadastre e configure os produtos que utilizarão
+                        a plataforma central de licenciamento.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success">
+                <span class="alert-icon">✓</span>
+
+                <span>
+                    @TempData["Sucesso"]
+                </span>
+            </div>
+        }
+
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger">
+                <span class="alert-icon">!</span>
+
+                <span>
+                    @TempData["Erro"]
+                </span>
+            </div>
+        }
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+                        Novo sistema
+                    </h3>
+
+                    <p>
+                        Cadastre um novo produto para utilização
+                        na plataforma de licenciamento.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <form method="post"
+                      action="/Sistemas?handler=Criar">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-grid">
+
+                        <div class="campo">
+
+                            <label for="Codigo">
+                                Código
+                            </label>
+
+                            <input type="text"
+                                   id="Codigo"
+                                   name="Codigo"
+                                   class="form-control"
+                                   maxlength="50"
+                                   placeholder="EX: OFICINAWEB"
+                                   autocomplete="off"
+                                   required />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="Nome">
+                                Nome
+                            </label>
+
+                            <input type="text"
+                                   id="Nome"
+                                   name="Nome"
+                                   class="form-control"
+                                   maxlength="150"
+                                   placeholder="Nome do sistema"
+                                   required />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="DiasTolerancia">
+                                Tolerância (dias)
+                            </label>
+
+                            <input type="number"
+                                   id="DiasTolerancia"
+                                   name="DiasTolerancia"
+                                   class="form-control"
+                                   min="0"
+                                   max="3650"
+                                   value="5"
+                                   required />
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="DiasOffline">
+                                Offline (dias)
+                            </label>
+
+                            <input type="number"
+                                   id="DiasOffline"
+                                   name="DiasOffline"
+                                   class="form-control"
+                                   min="0"
+                                   max="3650"
+                                   value="5"
+                                   required />
+
+                        </div>
+
+                        <div class="campo campo-botao">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <span class="btn-icon">＋</span>
+
+                                Cadastrar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+                        Sistemas cadastrados
+                    </h3>
+
+                    <div class="contador">
+                        @Model.Sistemas.Count sistema(s)
+                    </div>
+
+                </div>
+
+            </div>
+
+            @if (Model.Sistemas.Count == 0)
+            {
+                <div class="sem-dados">
+
+                    <div class="sem-dados-icon">
+                        ◇
+                    </div>
+
+                    <strong>
+                        Nenhum sistema cadastrado
+                    </strong>
+
+                    <span>
+                        Cadastre o primeiro sistema usando o formulário acima.
+                    </span>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-container">
+
+                    @foreach (var sistema in Model.Sistemas)
+                    {
+                        <form id="form-status-@sistema.SistemaId" method="post" action="/Sistemas?handler=Status">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="sistemaId" value="@sistema.SistemaId" />
+                            <input type="hidden" name="ativo" value="@(sistema.Ativo ? "false" : "true")" />
+                        </form>
+                    }
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Código
+                                </th>
+
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Tolerância
+                                </th>
+
+                                <th>
+                                    Offline
+                                </th>
+
+                                <th>
+                                    Planos
+                                </th>
+
+                                <th>
+                                    Instalações
+                                </th>
+
+                                <th>
+                                    Criado em
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var sistema in Model.Sistemas)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <span class="codigo">
+                                            @sistema.Codigo
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <form id="form-salvar-@sistema.SistemaId"
+                                              method="post"
+                                              action="/Sistemas?handler=Salvar">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="sistemaId"
+                                                   value="@sistema.SistemaId" />
+
+                                            <input type="hidden"
+                                                   name="codigo"
+                                                   value="@sistema.Codigo" />
+
+                                            <input type="text"
+                                                   name="nome"
+                                                   value="@sistema.Nome"
+                                                   class="form-control"
+                                                   maxlength="150"
+                                                   required />
+
+                                        </form>
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (sistema.Ativo)
+                                        {
+                                            <span class="status-badge status-ativo">
+                                                <span class="status-dot"></span>
+                                                ATIVO
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inativo">
+                                                <span class="status-dot"></span>
+                                                INATIVO
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="numero">
+
+                                        <input type="number"
+                                               name="diasTolerancia"
+                                               value="@sistema.DiasTolerancia"
+                                               class="form-control"
+                                               min="0"
+                                               max="3650"
+                                               required
+                                               form="form-salvar-@sistema.SistemaId" />
+
+                                    </td>
+
+                                    <td class="numero">
+
+                                        <input type="number"
+                                               name="diasOffline"
+                                               value="@sistema.DiasOffline"
+                                               class="form-control"
+                                               min="0"
+                                               max="3650"
+                                               required
+                                               form="form-salvar-@sistema.SistemaId" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="contador-cell">
+                                            @sistema.Planos.Count
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="contador-cell">
+                                            @sistema.Instalacoes.Count
+                                        </span>
+
+                                    </td>
+
+                                    <td class="data">
+
+                                        @sistema.CriadoEm.ToString(
+                                            "dd/MM/yyyy HH:mm")
+
+                                    </td>
+
+                                    <td class="acoes">
+
+                                        <div class="acoes-container">
+
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-sm"
+                                                    form="form-salvar-@sistema.SistemaId">
+
+                                                Salvar
+
+                                            </button>
+
+                                                @if (sistema.Ativo)
+                                                {
+                                                    <button type="submit"
+                                                            class="btn btn-danger btn-sm"
+                                                            form="form-status-@sistema.SistemaId"
+                                                            onclick="return confirm('Inativar este sistema? As instalações vinculadas deixarão de conseguir autenticar.');">
+
+                                                        Inativar
+
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit"
+                                                            class="btn btn-success btn-sm"
+                                                            form="form-status-@sistema.SistemaId"
+                                                            onclick="return confirm('Ativar este sistema?');">
+
+                                                        Ativar
+
+                                                    </button>
+                                                }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </section>
+
+    </div>
+
+</div>

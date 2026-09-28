@@ -1,0 +1,634 @@
+@page
+@model BlakBox.Api.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/index.css"
+          asp-append-version="true" />
+}
+
+<div class="dashboard">
+
+    <!-- ========================================================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================================================= -->
+
+    <div class="dashboard-header">
+
+        <div>
+            <span class="eyebrow">
+                PAINEL DE LICENCIAMENTO
+            </span>
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                Visão geral da API, instalações, licenças e atividade do sistema.
+            </p>
+        </div>
+
+        <div class="dashboard-date">
+            <span>Atualizado</span>
+            <strong>@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</strong>
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- CARDS PRINCIPAIS -->
+    <!-- ========================================================= -->
+
+    <section class="stats-grid">
+
+        <article class="stat-card">
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <div>
+                <span>Clientes ativos</span>
+
+                <strong>
+                    @Model.ClientesAtivos
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <div class="stat-icon">
+                ⚙
+            </div>
+
+            <div>
+                <span>Instalações ativas</span>
+
+                <strong>
+                    @Model.InstalacoesAtivas
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+                <span>Licenças ativas</span>
+
+                <strong>
+                    @Model.LicencasAtivas
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <div class="stat-icon">
+                ↗
+            </div>
+
+            <div>
+                <span>Requisições hoje</span>
+
+                <strong>
+                    @Model.RequisicoesHoje
+                </strong>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- SAÚDE DA API -->
+    <!-- ========================================================= -->
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="eyebrow">
+                    API
+                </span>
+
+                <h2>
+                    Saúde da API
+                </h2>
+            </div>
+
+            <span class="section-date">
+                Hoje
+            </span>
+
+        </div>
+
+
+        <div class="health-grid">
+
+            <div class="metric-card">
+
+                <span>Sucesso</span>
+
+                <strong>
+                    @Model.RequisicoesSucessoHoje
+                </strong>
+
+                <small>
+                    requisições
+                </small>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <span>Erros</span>
+
+                <strong>
+                    @Model.RequisicoesErroHoje
+                </strong>
+
+                <small>
+                    requisições
+                </small>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <span>Taxa de sucesso</span>
+
+                <strong>
+                    @Model.TaxaSucesso.ToString("0.0")%
+                </strong>
+
+                <small>
+                    hoje
+                </small>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <span>Tempo médio</span>
+
+                <strong>
+                    @Model.TempoMedioMs.ToString("0") ms
+                </strong>
+
+                <small>
+                    por requisição
+                </small>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <span>Maior duração</span>
+
+                <strong>
+                    @Model.MaiorDuracaoMs ms
+                </strong>
+
+                <small>
+                    hoje
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- LICENÇAS E INSTALAÇÕES -->
+    <!-- ========================================================= -->
+
+    <div class="dashboard-columns">
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        LICENCIAMENTO
+                    </span>
+
+                    <h2>
+                        Situação das licenças
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="status-list">
+
+                <div class="status-row">
+
+                    <div>
+                        <span class="status-dot success"></span>
+
+                        <span>
+                            Validações hoje
+                        </span>
+                    </div>
+
+                    <strong>
+                        @Model.ValidacoesHoje
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div>
+                        <span class="status-dot warning"></span>
+
+                        <span>
+                            Instalações sem validação hoje
+                        </span>
+                    </div>
+
+                    <strong>
+                        @Model.InstalacoesSemValidacaoHoje
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div>
+                        <span class="status-dot danger"></span>
+
+                        <span>
+                            Licenças vencidas
+                        </span>
+                    </div>
+
+                    <strong>
+                        @Model.LicencasVencidas
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div>
+                        <span class="status-dot warning"></span>
+
+                        <span>
+                            Vencendo em até 30 dias
+                        </span>
+                    </div>
+
+                    <strong>
+                        @Model.LicencasVencendo
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        INSTALAÇÕES
+                    </span>
+
+                    <h2>
+                        Comunicação
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="status-list">
+
+                <div class="status-row">
+
+                    <div>
+                        <span class="status-dot success"></span>
+
+                        <span>
+                            Comunicação nas últimas 24h
+                        </span>
+                    </div>
+
+                    <strong>
+                        @Model.InstalacoesComunicacaoRecente
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div>
+                        <span class="status-dot danger"></span>
+
+                        <span>
+                            Sem comunicação
+                        </span>
+                    </div>
+
+                    <strong>
+                        @Model.InstalacoesSemComunicacao
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- ATIVIDADE -->
+    <!-- ========================================================= -->
+
+    <div class="dashboard-columns">
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        ATIVIDADE
+                    </span>
+
+                    <h2>
+                        Requisições por operação
+                    </h2>
+                </div>
+
+            </div>
+
+
+            @if (Model.Operacoes.Count == 0)
+            {
+                <div class="empty-state">
+                    Nenhuma requisição registrada hoje.
+                </div>
+            }
+            else
+            {
+                <div class="operation-list">
+
+                    @foreach (var operacao in Model.Operacoes)
+                    {
+                        <div class="operation-row">
+
+                            <span>
+                                @operacao.Operacao
+                            </span>
+
+                            <strong>
+                                @operacao.Quantidade
+                            </strong>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </section>
+
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        ATIVIDADE
+                    </span>
+
+                    <h2>
+                        Requisições por hora
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="hour-chart">
+
+                @foreach (var hora in Model.RequisicoesPorHora)
+                {
+                    <div class="hour-column">
+
+                        <div class="hour-value">
+                            @hora.Quantidade
+                        </div>
+
+                        <div class="hour-bar-wrapper">
+
+   <div class="hour-bar"
+     data-value="@hora.Quantidade">
+</div>
+
+                        </div>
+
+                        <span>
+                            @hora.Hora.ToString("00")h
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- MONITORAMENTO -->
+    <!-- ========================================================= -->
+
+    <section class="dashboard-section monitoring-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="eyebrow">
+                    MONITORAMENTO
+                </span>
+
+                <h2>
+                    Requisições recentes
+                </h2>
+
+                <p>
+                    Últimas requisições recebidas pela API.
+                </p>
+            </div>
+
+            <span class="result-count">
+                @Model.RequisicoesRecentes.Count registros
+            </span>
+
+        </div>
+
+
+        @if (Model.RequisicoesRecentes.Count == 0)
+        {
+            <div class="empty-state">
+                Nenhuma requisição registrada.
+            </div>
+        }
+        else
+        {
+            <div class="table-wrapper">
+
+                <table class="dashboard-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Método</th>
+                            <th>Rota</th>
+                            <th>Operação</th>
+                            <th>Instalação</th>
+                            <th>Cliente</th>
+                            <th>Sistema</th>
+                            <th>Status</th>
+                            <th>Duração</th>
+                            <th>Resultado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var requisicao in Model.RequisicoesRecentes)
+                        {
+                            <tr>
+
+                                <td>
+                                    @requisicao.DataHora.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")
+                                </td>
+
+                                <td>
+                                    <span class="method-badge">
+                                        @requisicao.Metodo
+                                    </span>
+                                </td>
+
+                                <td class="route-cell">
+                                    @requisicao.Rota
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(requisicao.Operacao)
+                                        ? "-"
+                                        : requisicao.Operacao)
+                                </td>
+
+                                <td>
+                                    @(requisicao.InstalacaoId?.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @(requisicao.ClienteId?.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @(requisicao.SistemaId?.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @if (requisicao.StatusCode.HasValue)
+                                    {
+                                        <span class="status-code">
+                                            @requisicao.StatusCode
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @(requisicao.DuracaoMs.HasValue
+                                        ? $"{requisicao.DuracaoMs} ms"
+                                        : "-")
+                                </td>
+
+                                <td>
+
+                                    @if (requisicao.Sucesso)
+                                    {
+                                        <span class="result-badge success">
+                                            Sucesso
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="result-badge danger">
+                                            Erro
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </section>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/index.js"
+            asp-append-version="true"></script>
+}

@@ -1,0 +1,795 @@
+@page "/Licencas"
+@model BlakBox.Api.Pages.Licencas.IndexModel
+
+@{
+    ViewData["Title"] = "Licenças";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/licencas.css"
+          asp-append-version="true" />
+}
+
+<div class="licencas">
+
+    <div class="topbar">
+
+        <div class="topbar-inner">
+
+            <div>
+                <h1>
+                    Painel de Licenciamento
+                </h1>
+
+                <span>
+                    Administração central do BlakBox
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <main class="container">
+
+        <div class="header">
+
+            <div>
+
+                <h2>
+                    Licenças das Oficinas
+                </h2>
+
+                <div class="subtitle">
+                    Gerencie assinaturas, renovações, vencimentos,
+                    cancelamentos e histórico.
+                </div>
+
+            </div>
+
+        </div>
+
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success">
+                <span class="alert-icon">✓</span>
+
+                <span>
+                    @TempData["Sucesso"]
+                </span>
+            </div>
+        }
+
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger">
+                <span class="alert-icon">!</span>
+
+                <span>
+                    @TempData["Erro"]
+                </span>
+            </div>
+        }
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+                        Licenças cadastradas
+                    </h3>
+
+                    <div class="contador">
+                        @Model.Licencas.Count licença(s)
+                    </div>
+
+                </div>
+
+                <form method="post" action="/Licencas?handler=Criar" class="nova-licenca-form">
+                    @Html.AntiForgeryToken()
+                    <label for="instalacaoNovaLicenca">Criar nova licença</label>
+                    <select id="instalacaoNovaLicenca" name="instalacaoId" required
+                            disabled="@(Model.InstalacoesParaNovaLicenca.Count == 0 ? "disabled" : null)">
+                        <option value="">Selecione OficinaId / instalação</option>
+                        @foreach (var instalacao in Model.InstalacoesParaNovaLicenca)
+                        {
+                            var ultimaLicenca = instalacao.Licencas
+                                .OrderByDescending(l => l.LicencaId)
+                                .FirstOrDefault();
+                            var podeCriar = ultimaLicenca == null ||
+                                string.Equals(ultimaLicenca.SituacaoComercial,
+                                    BlakBox.Api.Models.Licenca.SituacaoCancelada,
+                                    StringComparison.OrdinalIgnoreCase);
+                            <option value="@instalacao.InstalacaoId" disabled="@(!podeCriar ? "disabled" : null)">
+                                @instalacao.InstalacaoKey — @(instalacao.NomeInstalacao ?? instalacao.Cliente.Nome)@(podeCriar ? "" : " (já possui licença)")
+                            </option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-ativar"
+                            disabled="@(Model.InstalacoesParaNovaLicenca.All(x => x.Licencas.Any() &&
+                                !string.Equals(x.Licencas.OrderByDescending(l => l.LicencaId).First().SituacaoComercial,
+                                    BlakBox.Api.Models.Licenca.SituacaoCancelada, StringComparison.OrdinalIgnoreCase))
+                                ? "disabled" : null)">
+                        Criar nova licença
+                    </button>
+                </form>
+
+            </div>
+
+            @if (Model.Licencas.Count == 0)
+            {
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        ◌
+                    </div>
+
+                    <h3>
+                        Nenhuma licença cadastrada
+                    </h3>
+
+                    <p>
+                        As licenças aparecerão aqui assim que uma instalação
+                        for registrada no sistema.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-container">
+
+                    /*
+                     * Os formulários ficam fora da tabela
+                     * para manter o HTML válido.
+                     */
+                    @foreach (var licenca in Model.Licencas)
+                    {
+                        <form id="form-salvar-@licenca.LicencaId"
+                              method="post"
+                              action="/Licencas?handler=Salvar">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="licencaId"
+                                   value="@licenca.LicencaId" />
+
+                            <input type="hidden"
+                                   name="ativa"
+                                   value="@licenca.Ativa.ToString().ToLowerInvariant()" />
+
+                        </form>
+
+                        <form id="form-ativar-@licenca.LicencaId"
+                              method="post"
+                              action="/Licencas?handler=Ativar">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="licencaId"
+                                   value="@licenca.LicencaId" />
+
+                            @if (!string.IsNullOrWhiteSpace(licenca.Plano))
+                            {
+                                <input type="hidden"
+                                       name="plano"
+                                       value="@licenca.Plano" />
+                            }
+
+                        </form>
+
+                        <form id="form-renovar-@licenca.LicencaId"
+                              method="post"
+                              action="/Licencas?handler=Renovar">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="licencaId"
+                                   value="@licenca.LicencaId" />
+
+                        </form>
+
+                        <form id="form-inativar-@licenca.LicencaId"
+                              method="post"
+                              action="/Licencas?handler=Inativar">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="licencaId"
+                                   value="@licenca.LicencaId" />
+
+                        </form>
+
+                        <form id="form-cancelar-@licenca.LicencaId"
+                              method="post"
+                              action="/Licencas?handler=Cancelar">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="licencaId"
+                                   value="@licenca.LicencaId" />
+
+                        </form>
+                    }
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Oficina
+                                </th>
+
+                                <th>
+                                    Oficina ID
+                                </th>
+
+                                <th>
+                                    Credencial
+                                </th>
+
+                                <th>
+                                    Plano
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Início
+                                </th>
+
+                                <th>
+                                    Vencimento
+                                </th>
+
+                                <th>
+                                    Tempo restante
+                                </th>
+
+                                <th>
+                                    Tolerância após vencimento
+                                </th>
+
+                                <th>
+                                    Uso offline
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var licenca in Model.Licencas)
+                            {
+                                var status =
+                                    BlakBox.Api.Services.StatusLicencaService
+                                        .ObterStatus(licenca);
+                                var cancelada = string.Equals(
+                                    licenca.SituacaoComercial,
+                                    BlakBox.Api.Models.Licenca.SituacaoCancelada,
+                                    StringComparison.OrdinalIgnoreCase);
+                                if (cancelada)
+                                {
+                                    status = "Cancelada";
+                                }
+
+                                var classeTempo =
+                                    BlakBox.Api.Pages.Licencas.IndexModel
+                                        .ObterClasseTempoRestante(
+                                            licenca.DataVencimento,
+                                            licenca.ValidaAte);
+
+                                var textoTempo =
+                                    BlakBox.Api.Pages.Licencas.IndexModel
+                                        .ObterTextoTempoRestante(
+                                            licenca.DataVencimento,
+                                            licenca.ValidaAte);
+
+                                var sistemaId =
+                                    licenca.Instalacao?.SistemaId ?? 0;
+
+                                var planosDisponiveis =
+                                    Model.PlanosPorSistema.TryGetValue(
+                                        sistemaId,
+                                        out var planosDoSistema)
+                                            ? planosDoSistema
+                                            : new List<BlakBox.Api.Models.Plano>();
+
+                                <tr>
+
+                                    <td class="nome">
+
+                                        <input type="text"
+                                               name="nomeOficina"
+                                               value="@licenca.NomeOficina"
+                                               class="form-control"
+                                               maxlength="150"
+                                               required
+                                               disabled="@(cancelada ? "disabled" : null)"
+                                               form="form-salvar-@licenca.LicencaId" />
+
+                                    </td>
+
+                                    <td class="oficina-id">
+
+                                        <span class="id">
+                                            @licenca.OficinaId
+                                        </span>
+
+                                    </td>
+
+                                    <td class="credencial">
+
+                                        @if (licenca.InstalacaoId.HasValue &&
+                                             Model.CredenciaisPorInstalacao.TryGetValue(
+                                                 licenca.InstalacaoId.Value,
+                                                 out var credencial) &&
+                                             credencial != null)
+                                        {
+                                            <span class="credencial-mascarada">
+                                                ••••••••
+                                                @credencial.UltimosCaracteres
+                                            </span>
+
+                                            <span class="subtexto">
+                                                Ativa
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="sem-plano">
+                                                Nenhuma
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="plano">
+
+                                        <select name="plano"
+                                                class="form-control"
+                                                disabled="@(cancelada ? "disabled" : null)"
+                                                form="@(status ==
+                                                        BlakBox.Api.Services.StatusLicencaService.AguardandoAtivacao
+                                                            ? $"form-ativar-{licenca.LicencaId}"
+                                                            : $"form-salvar-{licenca.LicencaId}")">
+
+                                            <option value="">
+                                                Selecione
+                                            </option>
+
+                                            @foreach (var plano in planosDisponiveis)
+                                            {
+                                                <option value="@plano.Codigo"
+                                                        selected="@(licenca.PlanoId == plano.PlanoId)">
+                                                    @plano.Nome
+                                                </option>
+                                            }
+
+                                        </select>
+
+                                    </td>
+
+                                    <td class="status">
+
+                                        @if (cancelada)
+                                        {
+                                            <span class="status-badge status-inativa">
+                                                <span class="status-dot"></span>
+                                                CANCELADA
+                                            </span>
+                                        }
+                                        else if (status ==
+                                            BlakBox.Api.Services.StatusLicencaService.AguardandoAtivacao)
+                                        {
+                                            <span class="status-badge status-pendente">
+                                                <span class="status-dot"></span>
+                                                AGUARDANDO ATIVAÇÃO
+                                            </span>
+                                        }
+                                        else if (status ==
+                                            BlakBox.Api.Services.StatusLicencaService.Ativa)
+                                        {
+                                            <span class="status-badge status-ativa">
+                                                <span class="status-dot"></span>
+                                                ATIVA
+                                            </span>
+                                        }
+                                        else if (status ==
+                                            BlakBox.Api.Services.StatusLicencaService.EmTolerancia)
+                                        {
+                                            <span class="status-badge status-tolerancia">
+                                                <span class="status-dot"></span>
+                                                EM TOLERÂNCIA
+                                            </span>
+                                        }
+                                        else if (status ==
+                                            BlakBox.Api.Services.StatusLicencaService.Vencida)
+                                        {
+                                            <span class="status-badge status-vencida">
+                                                <span class="status-dot"></span>
+                                                VENCIDA
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inativa">
+                                                <span class="status-dot"></span>
+                                                INATIVA
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="data">
+
+                                        @if (licenca.DataInicio.HasValue)
+                                        {
+                                            <input type="text"
+                                                   class="form-control campo-bloqueado"
+                                                   value="@licenca.DataInicio.Value.ToString("dd/MM/yyyy HH:mm")"
+                                                   readonly />
+                                        }
+                                        else
+                                        {
+                                            <span class="sem-plano">
+                                                Definida na ativação
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="data">
+
+                                        @if (licenca.DataVencimento.HasValue)
+                                        {
+                                            <input type="datetime-local"
+                                                   name="dataVencimento"
+                                                   value="@licenca.DataVencimento.Value.ToString("yyyy-MM-ddTHH:mm")"
+                                                   class="form-control"
+                                                   disabled="@(cancelada ? "disabled" : null)"
+                                                   form="form-salvar-@licenca.LicencaId" />
+                                        }
+                                        else
+                                        {
+                                            <span class="sem-plano">
+                                                Calculado na ativação
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="tempo">
+
+                                        <span class="tempo-badge @classeTempo"
+                                              data-vencimento="@(licenca.DataVencimento?.ToString("yyyy-MM-ddTHH:mm:ss"))"
+                                              data-valida-ate="@(licenca.ValidaAte?.ToString("yyyy-MM-ddTHH:mm:ss"))">
+
+                                            @textoTempo
+
+                                        </span>
+
+                                    </td>
+
+                                    <td class="offline">
+
+                                        @if (licenca.ValidaAte.HasValue)
+                                        {
+                                            <strong>
+                                                @licenca.ValidaAte.Value.ToString("dd/MM/yyyy HH:mm")
+                                            </strong>
+
+                                            <span class="subtexto">
+                                                Até @(licenca.Instalacao?.Sistema?.DiasTolerancia.ToString() ?? "—") dia(s) após o vencimento
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="sem-plano">
+                                                Definida ao ativar a licença
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="offline">
+
+                                        @if (licenca.Instalacao?.Sistema is { } sistema)
+                                        {
+                                            <strong>
+                                                @sistema.DiasOffline dia(s) sem validar
+                                            </strong>
+
+                                            <span class="subtexto">
+                                                @if (licenca.UltimaValidacao.HasValue)
+                                                {
+                                                    <text>Última validação: @licenca.UltimaValidacao.Value.ToString("dd/MM/yyyy HH:mm")</text>
+                                                }
+                                                else
+                                                {
+                                                    <text>Começa após a primeira validação online</text>
+                                                }
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="sem-plano">
+                                                Configuração do sistema indisponível
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="acoes">
+
+                                        <div class="acoes-container">
+
+                                        @if (cancelada)
+                                        {
+                                            <span class="status-badge status-inativa">
+                                                <span class="status-dot"></span>
+                                                CANCELADA
+                                            </span>
+                                        }
+                                        else if (status ==
+                                                BlakBox.Api.Services.StatusLicencaService.AguardandoAtivacao)
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-ativar"
+                                                        form="form-ativar-@licenca.LicencaId"
+                                                        onclick="return confirmarAtivacao(@licenca.LicencaId);">
+
+                                                    Ativar
+
+                                                </button>
+                                            }
+                                            else if (status ==
+                                                     BlakBox.Api.Services.StatusLicencaService.Inativa)
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-reativar"
+                                                        form="form-ativar-@licenca.LicencaId"
+                                                        onclick="return confirmarReativacao();">
+
+                                                    Reativar
+
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-salvar"
+                                                        form="form-salvar-@licenca.LicencaId">
+
+                                                    Salvar
+
+                                                </button>
+
+                                                @if (status ==
+                                                    BlakBox.Api.Services.StatusLicencaService.Ativa ||
+                                                    status ==
+                                                    BlakBox.Api.Services.StatusLicencaService.EmTolerancia ||
+                                                    status ==
+                                                    BlakBox.Api.Services.StatusLicencaService.Vencida)
+                                                {
+                                                    <button type="submit"
+                                                            class="btn btn-renovar"
+                                                            form="form-renovar-@licenca.LicencaId"
+                                                            onclick="return confirmarRenovacao();">
+
+                                                        Renovar
+
+                                                    </button>
+
+                                                    <button type="submit"
+                                                            class="btn btn-inativar"
+                                                            form="form-inativar-@licenca.LicencaId"
+                                                            onclick="return confirmarInativacao();">
+
+                                                        Inativar
+
+                                                    </button>
+
+                                                    <button type="submit"
+                                                            class="btn btn-cancelar"
+                                                            form="form-cancelar-@licenca.LicencaId"
+                                                            onclick="return confirmarCancelamento();">
+
+                                                        Cancelar
+
+                                                    </button>
+                                                }
+                                            }
+
+                                            <button type="button"
+                                                    class="btn btn-historico"
+                                                    onclick="alternarHistorico(@licenca.LicencaId)">
+
+                                                Histórico
+
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr id="historico-@licenca.LicencaId"
+                                    class="historico-row">
+
+                                    <td colspan="10">
+
+                                        <div class="historico-container">
+
+                                            <div class="historico-titulo">
+                                                Histórico da licença
+                                            </div>
+
+                                            @if (Model.Historicos.TryGetValue(
+                                                licenca.LicencaId,
+                                                out var historicos) &&
+                                                historicos.Count > 0)
+                                            {
+                                                <div class="historico-table-wrapper">
+
+                                                    <table class="historico-tabela">
+
+                                                        <thead>
+
+                                                            <tr>
+
+                                                                <th>
+                                                                    Data
+                                                                </th>
+
+                                                                <th>
+                                                                    Ação
+                                                                </th>
+
+                                                                <th>
+                                                                    Plano
+                                                                </th>
+
+                                                                <th>
+                                                                    Período
+                                                                </th>
+
+                                                                <th>
+                                                                    Origem
+                                                                </th>
+
+                                                                <th>
+                                                                    Observação
+                                                                </th>
+
+                                                            </tr>
+
+                                                        </thead>
+
+                                                        <tbody>
+
+                                                            @foreach (var item in historicos)
+                                                            {
+                                                                <tr>
+
+                                                                    <td>
+                                                                        @item.CriadoEm.ToString("dd/MM/yyyy HH:mm")
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <strong>
+                                                                            @item.Acao
+                                                                        </strong>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        @(item.Plano ?? "-")
+                                                                    </td>
+
+                                                                    <td>
+
+                                                                        @if (item.DataVencimentoNovo.HasValue)
+                                                                        {
+                                                                            @item.DataVencimentoNovo.Value.ToString("dd/MM/yyyy HH:mm")
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>-</span>
+                                                                        }
+
+                                                                    </td>
+
+                                                                    <td>
+                                                                        @item.Origem
+                                                                    </td>
+
+                                                                    <td>
+                                                                        @(item.Observacao ?? "-")
+                                                                    </td>
+
+                                                                </tr>
+                                                            }
+
+                                                        </tbody>
+
+                                                    </table>
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="historico-vazio">
+                                                    Nenhum evento registrado para esta licença.
+                                                </div>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </section>
+
+        <div class="ajuda">
+
+            <div class="ajuda-titulo">
+                Regras do licenciamento
+            </div>
+
+            <p>
+                A data de início é definida somente na primeira ativação e não pode
+                ser alterada. A renovação respeita o plano atual. A licença permanece
+                liberada até a data exibida em “Tolerância após vencimento”, calculada
+                conforme os dias de tolerância configurados no sistema. “Uso offline”
+                mostra por quanto tempo o aplicativo pode ficar sem validar com a API;
+                esse prazo é independente da tolerância comercial e usa os dias offline
+                e a última validação registrados para o sistema/instalação.
+            </p>
+
+            <p>
+                <strong>Inativar:</strong>
+                bloqueia o acesso sem apagar os dados da licença.
+            </p>
+
+            <p>
+                <strong>Cancelar:</strong>
+                bloqueia o acesso e registra o cancelamento no histórico.
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/licencas.js"
+            asp-append-version="true"></script>
+}

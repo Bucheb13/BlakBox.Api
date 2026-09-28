@@ -1,0 +1,865 @@
+/* ============================================================
+   SISTEMAS
+   ============================================================ */
+
+.sistemas {
+    --bg0: #070A10;
+    --bg1: #0A0F1A;
+
+    --panel: rgba(14, 20, 31, .78);
+    --panel-strong: rgba(17, 24, 37, .92);
+
+    --stroke: rgba(255, 255, 255, .08);
+    --stroke-strong: rgba(45, 235, 255, .18);
+
+    --text: #F2F7FF;
+    --muted: #8F9BAF;
+
+    --neon: #2DEBFF;
+    --neon2: #FF7A1A;
+
+    --ok: #28E98C;
+    --warn: #FFD166;
+    --danger: #FF3B6A;
+
+    --radius: 18px;
+    --radius-lg: 26px;
+
+    --shadow:
+        0 20px 55px rgba(0, 0, 0, .32);
+
+    --transition:
+        160ms ease;
+
+    width: 100%;
+    min-height: 100%;
+    color: var(--text);
+}
+
+.sistemas *,
+.sistemas *::before,
+.sistemas *::after {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.sistemas .container {
+    width: min(1500px, 100%);
+    margin: 0 auto;
+    padding: 34px 24px 60px;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.sistemas .header {
+    margin-bottom: 26px;
+}
+
+.sistemas .header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.sistemas .header h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(25px, 3vw, 34px);
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -.025em;
+}
+
+.sistemas .subtitle {
+    margin-top: 8px;
+    max-width: 800px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+
+.sistemas .alert {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin-bottom: 20px;
+    padding: 14px 17px;
+
+    border: 1px solid transparent;
+    border-radius: 14px;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.sistemas .alert-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+
+    border-radius: 50%;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.sistemas .alert-success {
+    color: #D8FFED;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(40, 233, 140, .13),
+            rgba(40, 233, 140, .05)
+        );
+    border-color: rgba(40, 233, 140, .24);
+}
+
+.sistemas .alert-success .alert-icon {
+    color: var(--ok);
+    background: rgba(40, 233, 140, .12);
+    border: 1px solid rgba(40, 233, 140, .25);
+}
+
+.sistemas .alert-danger {
+    color: #FFE1E8;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 59, 106, .13),
+            rgba(255, 59, 106, .05)
+        );
+    border-color: rgba(255, 59, 106, .24);
+}
+
+.sistemas .alert-danger .alert-icon {
+    color: var(--danger);
+    background: rgba(255, 59, 106, .12);
+    border: 1px solid rgba(255, 59, 106, .25);
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.sistemas .card {
+    position: relative;
+
+    margin-bottom: 24px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 28, 43, .82),
+            rgba(10, 15, 25, .78)
+        );
+
+    box-shadow: var(--shadow);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.sistemas .card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(45, 235, 255, .42),
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+.sistemas .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 21px 22px;
+
+    border-bottom: 1px solid var(--stroke);
+    background: rgba(255, 255, 255, .018);
+}
+
+.sistemas .card-header h3 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 750;
+    letter-spacing: -.01em;
+}
+
+.sistemas .card-header p {
+    margin: 6px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.sistemas .card-body {
+    padding: 22px;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.sistemas .form-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(170px, 1fr)
+        minmax(230px, 1.5fr)
+        minmax(160px, 1fr)
+        minmax(160px, 1fr)
+        auto;
+
+    gap: 16px;
+
+    align-items: end;
+}
+
+.sistemas .campo {
+    min-width: 0;
+}
+
+.sistemas .campo label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #B9C4D5;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.sistemas .form-control {
+    width: 100%;
+    min-height: 42px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 11px;
+
+    outline: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, .045),
+            rgba(255, 255, 255, .018)
+        );
+
+    color: var(--text);
+
+    font: inherit;
+    font-size: 13px;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.sistemas .form-control::placeholder {
+    color: #5F6B7E;
+}
+
+.sistemas .form-control:hover {
+    border-color: rgba(255, 255, 255, .15);
+}
+
+.sistemas .form-control:focus {
+    border-color: rgba(45, 235, 255, .55);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(45, 235, 255, .055),
+            rgba(255, 255, 255, .018)
+        );
+
+    box-shadow:
+        0 0 0 3px rgba(45, 235, 255, .09),
+        0 0 22px rgba(45, 235, 255, .07);
+}
+
+.sistemas input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.sistemas input[type="number"]::-webkit-inner-spin-button,
+.sistemas input[type="number"]::-webkit-outer-spin-button {
+    opacity: .55;
+}
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+
+.sistemas .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 9px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    color: white;
+
+    font: inherit;
+    font-size: 12px;
+    font-weight: 750;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition),
+        background var(--transition);
+}
+
+.sistemas .btn:hover {
+    transform: translateY(-1px);
+}
+
+.sistemas .btn:active {
+    transform: translateY(0);
+}
+
+.sistemas .btn:focus-visible {
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(45, 235, 255, .12);
+}
+
+.sistemas .btn-sm {
+    min-height: 36px;
+    padding: 8px 11px;
+    font-size: 11px;
+}
+
+.sistemas .btn-primary {
+    border-color: rgba(45, 235, 255, .30);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(45, 235, 255, .19),
+            rgba(45, 235, 255, .08)
+        );
+
+    color: #CFFFFF;
+
+    box-shadow:
+        0 0 20px rgba(45, 235, 255, .05);
+}
+
+.sistemas .btn-primary:hover {
+    border-color: rgba(45, 235, 255, .55);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(45, 235, 255, .28),
+            rgba(45, 235, 255, .11)
+        );
+
+    box-shadow:
+        0 0 24px rgba(45, 235, 255, .10);
+}
+
+.sistemas .btn-success {
+    border-color: rgba(40, 233, 140, .30);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(40, 233, 140, .18),
+            rgba(40, 233, 140, .07)
+        );
+
+    color: #D7FFEC;
+}
+
+.sistemas .btn-success:hover {
+    border-color: rgba(40, 233, 140, .52);
+
+    box-shadow:
+        0 0 22px rgba(40, 233, 140, .10);
+}
+
+.sistemas .btn-danger {
+    border-color: rgba(255, 59, 106, .30);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 59, 106, .18),
+            rgba(255, 59, 106, .07)
+        );
+
+    color: #FFE0E7;
+}
+
+.sistemas .btn-danger:hover {
+    border-color: rgba(255, 59, 106, .52);
+
+    box-shadow:
+        0 0 22px rgba(255, 59, 106, .10);
+}
+
+.sistemas .btn-icon {
+    font-size: 15px;
+    line-height: 1;
+}
+
+/* ============================================================
+   TABELA
+   ============================================================ */
+
+.sistemas .table-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(45, 235, 255, .25)
+        transparent;
+}
+
+.sistemas .table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.sistemas .table-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sistemas .table-container::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(45, 235, 255, .20);
+}
+
+.sistemas table {
+    width: 100%;
+    min-width: 1120px;
+
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.sistemas th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    padding: 13px 14px;
+
+    border-bottom: 1px solid rgba(45, 235, 255, .13);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(20, 29, 43, .98),
+            rgba(13, 20, 31, .98)
+        );
+
+    color: #AEBBCD;
+
+    text-align: left;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.sistemas td {
+    padding: 13px 14px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .055);
+
+    color: #DCE4EF;
+
+    vertical-align: middle;
+
+    font-size: 13px;
+}
+
+.sistemas tbody tr {
+    transition:
+        background var(--transition);
+}
+
+.sistemas tbody tr:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(45, 235, 255, .035),
+            rgba(255, 255, 255, .015)
+        );
+}
+
+.sistemas tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ============================================================
+   COLUNAS
+   ============================================================ */
+
+.sistemas .codigo {
+    display: inline-block;
+
+    padding: 6px 9px;
+
+    border: 1px solid rgba(45, 235, 255, .12);
+    border-radius: 8px;
+
+    background: rgba(45, 235, 255, .035);
+
+    color: var(--neon);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.sistemas .numero {
+    width: 120px;
+    min-width: 120px;
+}
+
+.sistemas .numero .form-control {
+    min-width: 90px;
+}
+
+.sistemas .data {
+    color: #A6B2C4;
+    white-space: nowrap;
+}
+
+.sistemas .contador-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 34px;
+    min-height: 28px;
+
+    padding: 4px 9px;
+
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, .025);
+
+    color: #CBD5E3;
+
+    font-size: 12px;
+    font-weight: 750;
+}
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.sistemas .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 7px 10px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: .055em;
+
+    white-space: nowrap;
+}
+
+.sistemas .status-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+}
+
+.sistemas .status-ativo {
+    border-color: rgba(40, 233, 140, .22);
+
+    background:
+        rgba(40, 233, 140, .08);
+
+    color: var(--ok);
+
+    box-shadow:
+        inset 0 0 16px rgba(40, 233, 140, .025);
+}
+
+.sistemas .status-ativo .status-dot {
+    background: var(--ok);
+
+    box-shadow:
+        0 0 8px rgba(40, 233, 140, .75);
+}
+
+.sistemas .status-inativo {
+    border-color: rgba(143, 155, 175, .18);
+
+    background:
+        rgba(143, 155, 175, .065);
+
+    color: #9CA8B9;
+}
+
+.sistemas .status-inativo .status-dot {
+    background: #7F8A9A;
+}
+
+/* ============================================================
+   AÇÕES
+   ============================================================ */
+
+.sistemas .acoes {
+    min-width: 190px;
+    white-space: nowrap;
+}
+
+.sistemas .acoes-container {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.sistemas .acoes form {
+    display: inline;
+    margin: 0;
+}
+
+/* ============================================================
+   VAZIO
+   ============================================================ */
+
+.sistemas .sem-dados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 220px;
+
+    padding: 35px 20px;
+
+    color: var(--muted);
+    text-align: center;
+}
+
+.sistemas .sem-dados-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+
+    margin-bottom: 14px;
+
+    border: 1px solid rgba(45, 235, 255, .16);
+    border-radius: 15px;
+
+    background: rgba(45, 235, 255, .04);
+
+    color: rgba(45, 235, 255, .60);
+
+    font-size: 25px;
+}
+
+.sistemas .sem-dados strong {
+    margin-bottom: 5px;
+
+    color: #DCE5F2;
+
+    font-size: 14px;
+}
+
+.sistemas .sem-dados span {
+    font-size: 12px;
+}
+
+/* ============================================================
+   CONTADOR
+   ============================================================ */
+
+.sistemas .contador {
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .sistemas .form-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .sistemas .campo-botao {
+        grid-column: 1 / -1;
+    }
+
+    .sistemas .campo-botao .btn {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 760px) {
+
+    .sistemas .container {
+        padding:
+            24px
+            16px
+            45px;
+    }
+
+    .sistemas .header {
+        margin-bottom: 21px;
+    }
+
+    .sistemas .card-header {
+        padding: 18px;
+    }
+
+    .sistemas .card-body {
+        padding: 18px;
+    }
+
+    .sistemas .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sistemas .campo-botao {
+        grid-column: auto;
+    }
+
+    .sistemas .card {
+        border-radius: 20px;
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .sistemas .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .sistemas .header h2 {
+        font-size: 25px;
+    }
+
+    .sistemas .subtitle {
+        font-size: 13px;
+    }
+
+    .sistemas .card-header {
+        padding: 16px;
+    }
+
+    .sistemas .card-body {
+        padding: 16px;
+    }
+
+    .sistemas .alert {
+        align-items: flex-start;
+    }
+
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sistemas *,
+    .sistemas *::before,
+    .sistemas *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+}

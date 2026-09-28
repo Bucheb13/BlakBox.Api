@@ -1,0 +1,1357 @@
+/* ============================================================
+   BLAKBOX — CLIENTES
+   PADRÃO DARK / GLASS / NEON
+   ============================================================ */
+
+/* ============================================================
+   RESET GLOBAL DA PÁGINA
+   ============================================================ */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    min-width: 100%;
+
+    min-height: 100%;
+
+    background: #070A10;
+}
+
+html {
+    background: #070A10;
+}
+
+body {
+    overflow-x: hidden;
+
+    color: rgba(255,255,255,.92);
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   BLAKBOX — VARIÁVEIS
+   ============================================================ */
+
+.clientes {
+    --bg0: #070A10;
+    --bg1: #0A0F1A;
+
+    --panel: rgba(255,255,255,.06);
+    --panel2: rgba(255,255,255,.08);
+
+    --stroke: rgba(255,255,255,.10);
+    --stroke2: rgba(255,255,255,.16);
+
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.66);
+    --muted2: rgba(255,255,255,.48);
+
+    --neon: #2DEBFF;
+    --neon2: #FF7A1A;
+
+    --ok: #28E98C;
+    --warn: #FFD166;
+    --danger: #FF3B6A;
+
+    --r: 18px;
+    --r2: 26px;
+
+    --shadow:
+        0 12px 30px rgba(0,0,0,.45);
+
+    --shadow2:
+        0 18px 60px rgba(0,0,0,.55);
+
+    --t: 180ms;
+    --t2: 240ms;
+
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 14px;
+
+    padding-bottom:
+        max(
+            20px,
+            env(safe-area-inset-bottom)
+        );
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            900px 420px at 15% -10%,
+            rgba(45,235,255,.08),
+            transparent 60%
+        ),
+        radial-gradient(
+            800px 420px at 100% 10%,
+            rgba(255,122,26,.06),
+            transparent 60%
+        ),
+        linear-gradient(
+            180deg,
+            var(--bg0),
+            var(--bg1)
+        );
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+.clientes *,
+.clientes *::before,
+.clientes *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   GARANTE FUNDO ESCURO NO ELEMENTO RAIZ
+   ============================================================ */
+
+.clientes-page,
+.clientes {
+    background-color: #070A10;
+}
+
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.clientes .container {
+    width: 100%;
+    min-width: 0;
+    max-width: 1400px;
+
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   TOPO
+   ============================================================ */
+
+.clientes .topbar {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 76px;
+
+    padding: 16px 18px;
+
+    margin: 0 0 12px;
+
+    overflow: hidden;
+
+    border-radius: var(--r2);
+
+    border: 1px solid var(--stroke);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.035)
+        );
+
+    box-shadow: var(--shadow);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.clientes .topbar::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -2px;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            650px 220px at var(--mx, 18%) var(--my, 20%),
+            rgba(45,235,255,.18),
+            transparent 62%
+        ),
+        radial-gradient(
+            600px 240px at 85% 25%,
+            rgba(255,122,26,.10),
+            transparent 64%
+        );
+
+    opacity: .9;
+}
+
+.clientes .topbar h1 {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 20px;
+    font-weight: 950;
+
+    line-height: 1.2;
+
+    letter-spacing: .4px;
+}
+
+
+/* ============================================================
+   HEADER DA PÁGINA
+   ============================================================ */
+
+.clientes .header {
+    position: relative;
+
+    width: 100%;
+
+    padding: 16px 4px 12px;
+
+    margin: 0 0 12px;
+}
+
+.clientes .header h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 26px;
+    line-height: 1.15;
+
+    font-weight: 950;
+
+    letter-spacing: .3px;
+}
+
+.clientes .subtitle {
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+
+.clientes .alert {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 44px;
+
+    margin: 0 0 12px;
+
+    padding: 10px 13px;
+
+    border-radius: 15px;
+
+    border: 1px solid var(--stroke);
+
+    background: rgba(0,0,0,.25);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.30);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.clientes .alert-success {
+    color: rgba(255,255,255,.92);
+
+    border-color:
+        rgba(40,233,140,.28);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(40,233,140,.10),
+            rgba(0,0,0,.22)
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(40,233,140,.04),
+        0 12px 30px rgba(0,0,0,.35);
+}
+
+.clientes .alert-danger {
+    color: rgba(255,255,255,.92);
+
+    border-color:
+        rgba(255,59,106,.30);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,59,106,.10),
+            rgba(0,0,0,.22)
+        );
+}
+
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.clientes .card {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 0 0 12px;
+
+    border-radius: var(--r2);
+
+    border: 1px solid var(--stroke);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.07),
+            rgba(255,255,255,.03)
+        );
+
+    box-shadow: var(--shadow2);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    overflow: hidden;
+}
+
+.clientes .card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -2px;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            700px 260px at var(--mx, 20%) var(--my, 10%),
+            rgba(45,235,255,.13),
+            transparent 62%
+        ),
+        radial-gradient(
+            650px 250px at 90% 15%,
+            rgba(255,122,26,.07),
+            transparent 64%
+        );
+
+    opacity: .85;
+}
+
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+
+.clientes .card-header {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    min-height: 62px;
+
+    padding: 12px 14px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+}
+
+.clientes .card-header h3 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 950;
+
+    line-height: 1.2;
+
+    letter-spacing: .35px;
+}
+
+
+/* ============================================================
+   CARD BODY
+   ============================================================ */
+
+.clientes .card-body {
+    position: relative;
+
+    z-index: 2;
+
+    padding: 14px;
+}
+
+
+/* ============================================================
+   CONTADOR
+   ============================================================ */
+
+.clientes .contador {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    border:
+        1px solid rgba(45,235,255,.22);
+
+    background:
+        rgba(45,235,255,.07);
+
+    color:
+        rgba(255,255,255,.78);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 0 18px rgba(45,235,255,.05);
+}
+
+
+/* ============================================================
+   FORM GRID
+   ============================================================ */
+
+.clientes .form-grid {
+    position: relative;
+
+    z-index: 3;
+
+    display: grid;
+
+    grid-template-columns:
+        1.25fr
+        1fr
+        1.25fr
+        1fr
+        1.5fr
+        .65fr
+        auto;
+
+    gap: 10px;
+
+    align-items: end;
+}
+
+.clientes .form-grid > div {
+    min-width: 0;
+}
+
+.clientes .campo {
+    min-width: 0;
+}
+
+
+/* ============================================================
+   LABEL
+   ============================================================ */
+
+.clientes label {
+    display: block;
+
+    margin: 0 0 6px;
+
+    padding-left: 5px;
+
+    color:
+        rgba(255,255,255,.62);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    line-height: 1.2;
+
+    letter-spacing: .35px;
+}
+
+
+/* ============================================================
+   INPUT
+   ============================================================ */
+
+.clientes .form-control {
+    width: 100%;
+    min-width: 0;
+
+    height: 40px;
+
+    margin: 0;
+
+    padding: 0 11px;
+
+    color: var(--text);
+
+    border-radius: 14px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(0,0,0,.22);
+
+    outline: none;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.035),
+        0 8px 22px rgba(0,0,0,.20);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition:
+        border-color var(--t),
+        box-shadow var(--t),
+        background var(--t),
+        transform var(--t);
+}
+
+.clientes .form-control::placeholder {
+    color:
+        rgba(255,255,255,.38);
+}
+
+.clientes .form-control:hover {
+    border-color:
+        rgba(255,255,255,.19);
+}
+
+.clientes .form-control:focus {
+    border-color:
+        rgba(45,235,255,.42);
+
+    background:
+        rgba(0,0,0,.27);
+
+    box-shadow:
+        0 0 0 4px rgba(45,235,255,.09),
+        0 0 25px rgba(45,235,255,.08),
+        inset 0 0 0 1px rgba(45,235,255,.08);
+}
+
+.clientes .form-control:disabled {
+    opacity: .55;
+
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+
+.clientes .btn {
+    position: relative;
+
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 13px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid rgba(255,255,255,.14);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 11px;
+    font-weight: 950;
+
+    line-height: 1;
+
+    letter-spacing: .25px;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform var(--t),
+        box-shadow var(--t),
+        border-color var(--t),
+        background var(--t),
+        filter var(--t);
+}
+
+.clientes .btn:focus {
+    outline: none;
+}
+
+.clientes .btn:focus-visible {
+    border-color:
+        rgba(45,235,255,.40);
+
+    box-shadow:
+        0 0 0 4px rgba(45,235,255,.12),
+        0 0 25px rgba(45,235,255,.10);
+}
+
+.clientes .btn:active {
+    transform:
+        translateY(1px)
+        scale(.99);
+}
+
+
+/* ============================================================
+   PRIMARY
+   ============================================================ */
+
+.clientes .btn-primary {
+    border-color:
+        rgba(45,235,255,.34);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(45,235,255,.30),
+            rgba(45,235,255,.08)
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(45,235,255,.16),
+        0 12px 28px rgba(45,235,255,.09);
+}
+
+.clientes .btn-primary:hover {
+    border-color:
+        rgba(45,235,255,.55);
+
+    box-shadow:
+        0 0 0 4px rgba(45,235,255,.10),
+        0 0 30px rgba(45,235,255,.15);
+
+    filter: brightness(1.08);
+}
+
+
+/* ============================================================
+   DANGER
+   ============================================================ */
+
+.clientes .btn-danger {
+    border-color:
+        rgba(255,59,106,.28);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,59,106,.12),
+            rgba(255,59,106,.04)
+        );
+
+    color:
+        rgba(255,255,255,.90);
+}
+
+.clientes .btn-danger:hover {
+    border-color:
+        rgba(255,59,106,.48);
+
+    box-shadow:
+        0 0 0 4px rgba(255,59,106,.08),
+        0 0 26px rgba(255,59,106,.10);
+}
+
+
+/* ============================================================
+   SUCCESS
+   ============================================================ */
+
+.clientes .btn-success {
+    border-color:
+        rgba(40,233,140,.28);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(40,233,140,.12),
+            rgba(40,233,140,.04)
+        );
+
+    color:
+        rgba(255,255,255,.90);
+}
+
+.clientes .btn-success:hover {
+    border-color:
+        rgba(40,233,140,.48);
+
+    box-shadow:
+        0 0 0 4px rgba(40,233,140,.08),
+        0 0 26px rgba(40,233,140,.10);
+}
+
+
+/* ============================================================
+   TABELA
+   ============================================================ */
+
+.clientes .table-container {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    min-width: 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    border-radius: 18px;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    background:
+        rgba(0,0,0,.22);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.035);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(45,235,255,.30)
+        rgba(255,255,255,.04);
+}
+
+.clientes .table-container::-webkit-scrollbar {
+    height: 9px;
+}
+
+.clientes .table-container::-webkit-scrollbar-track {
+    background:
+        rgba(255,255,255,.035);
+}
+
+.clientes .table-container::-webkit-scrollbar-thumb {
+    background:
+        rgba(45,235,255,.24);
+
+    border-radius: 999px;
+
+    border: 2px solid transparent;
+
+    background-clip: padding-box;
+}
+
+.clientes .table-container::-webkit-scrollbar-thumb:hover {
+    background:
+        rgba(45,235,255,.38);
+
+    background-clip: padding-box;
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.clientes table {
+    width: 100%;
+
+    min-width: 1250px;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    color: var(--text);
+}
+
+.clientes thead th {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+    height: 44px;
+
+    padding: 0 12px;
+
+    text-align: left;
+
+    color:
+        rgba(255,255,255,.66);
+
+    background:
+        rgba(10,15,26,.86);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.10);
+
+    font-size: 10px;
+    font-weight: 950;
+
+    letter-spacing: .45px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.clientes tbody td {
+    padding: 9px 12px;
+
+    color:
+        rgba(255,255,255,.80);
+
+    background:
+        rgba(0,0,0,.10);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+    vertical-align: middle;
+}
+
+.clientes tbody tr {
+    transition:
+        background var(--t);
+}
+
+.clientes tbody tr:hover td {
+    background:
+        rgba(45,235,255,.035);
+}
+
+.clientes tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* ============================================================
+   INPUTS DA TABELA
+   ============================================================ */
+
+.clientes tbody .form-control {
+    height: 36px;
+
+    padding: 0 9px;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+
+    background:
+        rgba(0,0,0,.25);
+}
+
+.clientes tbody .form-control:focus {
+    box-shadow:
+        0 0 0 3px rgba(45,235,255,.08),
+        0 0 20px rgba(45,235,255,.07);
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.clientes .status-badge {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 27px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    font-size: 9px;
+    font-weight: 950;
+
+    letter-spacing: .5px;
+}
+
+.clientes .status-badge::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.50);
+}
+
+
+/* ============================================================
+   ATIVO
+   ============================================================ */
+
+.clientes .status-ativo {
+    border-color:
+        rgba(40,233,140,.28);
+
+    color:
+        rgba(255,255,255,.88);
+
+    background:
+        rgba(40,233,140,.07);
+}
+
+.clientes .status-ativo::before {
+    background:
+        var(--ok);
+
+    box-shadow:
+        0 0 12px rgba(40,233,140,.45);
+
+    animation:
+        clientesPulseOk 1.6s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   INATIVO
+   ============================================================ */
+
+.clientes .status-inativo {
+    border-color:
+        rgba(255,59,106,.28);
+
+    color:
+        rgba(255,255,255,.80);
+
+    background:
+        rgba(255,59,106,.06);
+}
+
+.clientes .status-inativo::before {
+    background:
+        var(--danger);
+
+    box-shadow:
+        0 0 12px rgba(255,59,106,.35);
+}
+
+
+/* ============================================================
+   INSTALAÇÕES
+   ============================================================ */
+
+.clientes .numero {
+    text-align: center;
+}
+
+.clientes .texto-destaque {
+    min-width: 30px;
+    height: 30px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 8px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid rgba(45,235,255,.20);
+
+    background:
+        rgba(45,235,255,.06);
+
+    color:
+        rgba(255,255,255,.90);
+
+    font-size: 12px;
+    font-weight: 950;
+
+    box-shadow:
+        0 0 15px rgba(45,235,255,.04);
+}
+
+
+/* ============================================================
+   DATA
+   ============================================================ */
+
+.clientes tbody td:nth-child(9) {
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   AÇÕES
+   ============================================================ */
+
+.clientes .acoes {
+    min-width: 175px;
+
+    white-space: nowrap;
+}
+
+.clientes .acoes form {
+    display: inline-flex;
+
+    margin:
+        0 0 0 5px;
+
+    vertical-align: middle;
+}
+
+.clientes .acoes form:first-child {
+    margin-left: 0;
+}
+
+.clientes .acoes .btn {
+    min-height: 34px;
+
+    padding: 7px 10px;
+
+    border-radius: 11px;
+
+    font-size: 10px;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.clientes .sem-dados {
+    position: relative;
+
+    z-index: 2;
+
+    min-height: 180px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    text-align: center;
+
+    background:
+        rgba(0,0,0,.15);
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   ANIMAÇÕES
+   ============================================================ */
+
+@keyframes clientesPulseOk {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(40,233,140,0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 7px rgba(40,233,140,.08);
+    }
+}
+
+
+/* ============================================================
+   DESKTOP GRANDE
+   ============================================================ */
+
+@media (min-width: 1200px) {
+
+    .clientes {
+        padding: 18px;
+    }
+
+    .clientes .form-grid {
+        gap: 12px;
+    }
+}
+
+
+/* ============================================================
+   NOTEBOOK / TABLET GRANDE
+   ============================================================ */
+
+@media (max-width: 1199px) {
+
+    .clientes .form-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+
+    .clientes .form-grid > div:last-child {
+        grid-column: auto;
+    }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .clientes .form-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .clientes .topbar {
+        min-height: 68px;
+    }
+
+    .clientes .header h2 {
+        font-size: 24px;
+    }
+}
+
+
+/* ============================================================
+   CELULAR
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .clientes {
+        padding: 10px;
+    }
+
+    .clientes .topbar {
+        min-height: 62px;
+
+        padding: 12px 14px;
+
+        border-radius: 20px;
+    }
+
+    .clientes .topbar h1 {
+        font-size: 17px;
+    }
+
+    .clientes .header {
+        padding:
+            14px 3px 10px;
+    }
+
+    .clientes .header h2 {
+        font-size: 22px;
+    }
+
+    .clientes .subtitle {
+        font-size: 12px;
+    }
+
+    .clientes .card {
+        border-radius: 20px;
+    }
+
+    .clientes .card-header {
+        min-height: 58px;
+
+        padding: 10px 12px;
+    }
+
+    .clientes .card-header h3 {
+        font-size: 15px;
+    }
+
+    .clientes .card-body {
+        padding: 12px;
+    }
+
+    .clientes .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .clientes .form-grid > div:last-child {
+        width: 100%;
+    }
+
+    .clientes .form-grid > div:last-child .btn {
+        width: 100%;
+    }
+
+    .clientes .table-container {
+        border-radius: 15px;
+    }
+
+    .clientes table {
+        min-width: 1150px;
+    }
+}
+
+
+/* ============================================================
+   CELULAR PEQUENO
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+    .clientes {
+        padding: 8px;
+    }
+
+    .clientes .topbar {
+        padding: 11px 12px;
+
+        border-radius: 18px;
+    }
+
+    .clientes .topbar h1 {
+        font-size: 16px;
+    }
+
+    .clientes .header h2 {
+        font-size: 21px;
+    }
+
+    .clientes .card-header {
+        gap: 8px;
+    }
+
+    .clientes .contador {
+        font-size: 10px;
+
+        padding:
+            5px 8px;
+    }
+}
+
+
+/* ============================================================
+   ACESSIBILIDADE — REDUÇÃO DE MOVIMENTO
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .clientes *,
+    .clientes *::before,
+    .clientes *::after {
+        animation: none !important;
+
+        transition: none !important;
+    }
+}

@@ -1,0 +1,1505 @@
+
+/* ============================================================
+   BLAKBOX — INSTALAÇÕES
+   PADRÃO DARK / GLASS / NEON
+   ============================================================ */
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    min-width: 100%;
+
+    min-height: 100%;
+
+    background: #070A10;
+}
+
+html {
+    background: #070A10;
+}
+
+body {
+    overflow-x: hidden;
+
+    color: rgba(255,255,255,.92);
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   VARIÁVEIS
+   ============================================================ */
+
+.instalacoes {
+    --bg0: #070A10;
+    --bg1: #0A0F1A;
+
+    --panel: rgba(255,255,255,.06);
+    --panel2: rgba(255,255,255,.08);
+
+    --stroke: rgba(255,255,255,.10);
+    --stroke2: rgba(255,255,255,.16);
+
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.66);
+    --muted2: rgba(255,255,255,.48);
+
+    --neon: #2DEBFF;
+    --neon2: #FF7A1A;
+
+    --ok: #28E98C;
+    --warn: #FFD166;
+    --danger: #FF3B6A;
+
+    --r: 18px;
+    --r2: 26px;
+
+    --shadow:
+        0 12px 30px rgba(0,0,0,.45);
+
+    --shadow2:
+        0 18px 60px rgba(0,0,0,.55);
+
+    --t: 180ms;
+    --t2: 240ms;
+
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 14px;
+
+    padding-bottom:
+        max(
+            20px,
+            env(safe-area-inset-bottom)
+        );
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            900px 420px at 15% -10%,
+            rgba(45,235,255,.08),
+            transparent 60%
+        ),
+        radial-gradient(
+            800px 420px at 100% 10%,
+            rgba(255,122,26,.06),
+            transparent 60%
+        ),
+        linear-gradient(
+            180deg,
+            var(--bg0),
+            var(--bg1)
+        );
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+.instalacoes *,
+.instalacoes *::before,
+.instalacoes *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.instalacoes .container {
+    width: 100%;
+    min-width: 0;
+    max-width: 1400px;
+
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   TOPO
+   ============================================================ */
+
+.instalacoes .topbar {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 76px;
+
+    padding: 16px 18px;
+
+    margin: 0 0 12px;
+
+    overflow: hidden;
+
+    border-radius: var(--r2);
+
+    border:
+        1px solid var(--stroke);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.035)
+        );
+
+    box-shadow: var(--shadow);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.instalacoes .topbar::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -2px;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            650px 220px at var(--mx, 18%) var(--my, 20%),
+            rgba(45,235,255,.18),
+            transparent 62%
+        ),
+        radial-gradient(
+            600px 240px at 85% 25%,
+            rgba(255,122,26,.10),
+            transparent 64%
+        );
+
+    opacity: .9;
+}
+
+.instalacoes .topbar h1 {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 20px;
+    font-weight: 950;
+
+    line-height: 1.2;
+
+    letter-spacing: .4px;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.instalacoes .header {
+    position: relative;
+
+    width: 100%;
+
+    padding: 16px 4px 12px;
+
+    margin: 0 0 12px;
+}
+
+.instalacoes .header h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 26px;
+    line-height: 1.15;
+
+    font-weight: 950;
+
+    letter-spacing: .3px;
+}
+
+.instalacoes .subtitle {
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+
+.instalacoes .alert {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 100%;
+    min-height: 44px;
+
+    margin: 0 0 12px;
+
+    padding: 10px 13px;
+
+    border-radius: 15px;
+
+    border:
+        1px solid var(--stroke);
+
+    background:
+        rgba(0,0,0,.25);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.30);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.instalacoes .alert-success {
+    color: rgba(255,255,255,.92);
+
+    border-color:
+        rgba(40,233,140,.28);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(40,233,140,.10),
+            rgba(0,0,0,.22)
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(40,233,140,.04),
+        0 12px 30px rgba(0,0,0,.35);
+}
+
+.instalacoes .alert-danger {
+    color: rgba(255,255,255,.92);
+
+    border-color:
+        rgba(255,59,106,.30);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,59,106,.10),
+            rgba(0,0,0,.22)
+        );
+}
+
+
+/* ============================================================
+   CREDENCIAL NOVA
+   ============================================================ */
+
+.instalacoes .alert-credencial {
+    color: rgba(255,255,255,.92);
+
+    border-color:
+        rgba(255,209,102,.30);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,209,102,.10),
+            rgba(0,0,0,.25)
+        );
+}
+
+.instalacoes .credencial-titulo {
+    color:
+        var(--warn);
+
+    font-size: 14px;
+    font-weight: 950;
+
+    letter-spacing: .35px;
+}
+
+.instalacoes .credencial-detalhes {
+    margin-top: 7px;
+
+    color:
+        rgba(255,255,255,.72);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.instalacoes .credencial-chave {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 12px 14px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid rgba(45,235,255,.20);
+
+    background:
+        rgba(0,0,0,.42);
+
+    color:
+        var(--neon);
+
+    font-family:
+        "Cascadia Code",
+        "Consolas",
+        monospace;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    line-height: 1.5;
+
+    word-break: break-all;
+
+    user-select: all;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.025),
+        0 0 25px rgba(45,235,255,.04);
+}
+
+.instalacoes .credencial-aviso {
+    margin-top: 8px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 11px;
+
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.instalacoes .card {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 0 0 12px;
+
+    border-radius: var(--r2);
+
+    border:
+        1px solid var(--stroke);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.07),
+            rgba(255,255,255,.03)
+        );
+
+    box-shadow: var(--shadow2);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    overflow: hidden;
+}
+
+.instalacoes .card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -2px;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            700px 260px at var(--mx, 20%) var(--my, 10%),
+            rgba(45,235,255,.13),
+            transparent 62%
+        ),
+        radial-gradient(
+            650px 250px at 90% 15%,
+            rgba(255,122,26,.07),
+            transparent 64%
+        );
+
+    opacity: .85;
+}
+
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+
+.instalacoes .card-header {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    min-height: 62px;
+
+    padding: 12px 14px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+}
+
+.instalacoes .card-header h3 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 950;
+
+    line-height: 1.2;
+
+    letter-spacing: .35px;
+}
+
+
+/* ============================================================
+   CARD BODY
+   ============================================================ */
+
+.instalacoes .card-body {
+    position: relative;
+
+    z-index: 2;
+
+    padding: 14px;
+}
+
+
+/* ============================================================
+   CONTADOR
+   ============================================================ */
+
+.instalacoes .contador {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    border:
+        1px solid rgba(45,235,255,.22);
+
+    background:
+        rgba(45,235,255,.07);
+
+    color:
+        rgba(255,255,255,.78);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 0 18px rgba(45,235,255,.05);
+}
+
+
+/* ============================================================
+   FORM GRID
+   ============================================================ */
+
+.instalacoes .form-grid {
+    position: relative;
+
+    z-index: 3;
+
+    display: grid;
+
+    grid-template-columns:
+        1.25fr
+        1fr
+        1.25fr
+        1fr
+        auto;
+
+    gap: 10px;
+
+    align-items: end;
+}
+
+.instalacoes .form-grid > div {
+    min-width: 0;
+}
+
+.instalacoes .campo {
+    min-width: 0;
+}
+
+
+/* ============================================================
+   LABEL
+   ============================================================ */
+
+.instalacoes label {
+    display: block;
+
+    margin: 0 0 6px;
+
+    padding-left: 5px;
+
+    color:
+        rgba(255,255,255,.62);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    line-height: 1.2;
+
+    letter-spacing: .35px;
+}
+
+
+/* ============================================================
+   INPUT / SELECT
+   ============================================================ */
+
+.instalacoes .form-control {
+    width: 100%;
+    min-width: 0;
+
+    height: 40px;
+
+    margin: 0;
+
+    padding: 0 11px;
+
+    color: var(--text);
+
+    border-radius: 14px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(0,0,0,.22);
+
+    outline: none;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.035),
+        0 8px 22px rgba(0,0,0,.20);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition:
+        border-color var(--t),
+        box-shadow var(--t),
+        background var(--t),
+        transform var(--t);
+}
+
+.instalacoes .form-control::placeholder {
+    color:
+        rgba(255,255,255,.38);
+}
+
+.instalacoes .form-control:hover {
+    border-color:
+        rgba(255,255,255,.19);
+}
+
+.instalacoes .form-control:focus {
+    border-color:
+        rgba(45,235,255,.42);
+
+    background:
+        rgba(0,0,0,.27);
+
+    box-shadow:
+        0 0 0 4px rgba(45,235,255,.09),
+        0 0 25px rgba(45,235,255,.08),
+        inset 0 0 0 1px rgba(45,235,255,.08);
+}
+
+.instalacoes .form-control:disabled,
+.instalacoes .form-control[readonly] {
+    opacity: .55;
+
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+
+.instalacoes .btn {
+    position: relative;
+
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 13px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid rgba(255,255,255,.14);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 11px;
+    font-weight: 950;
+
+    line-height: 1;
+
+    letter-spacing: .25px;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform var(--t),
+        box-shadow var(--t),
+        border-color var(--t),
+        background var(--t),
+        filter var(--t);
+}
+
+.instalacoes .btn:hover {
+    filter: brightness(1.08);
+}
+
+.instalacoes .btn:focus {
+    outline: none;
+}
+
+.instalacoes .btn:focus-visible {
+    border-color:
+        rgba(45,235,255,.40);
+
+    box-shadow:
+        0 0 0 4px rgba(45,235,255,.12),
+        0 0 25px rgba(45,235,255,.10);
+}
+
+.instalacoes .btn:active {
+    transform:
+        translateY(1px)
+        scale(.99);
+}
+
+
+/* ============================================================
+   PRIMARY
+   ============================================================ */
+
+.instalacoes .btn-primary {
+    border-color:
+        rgba(45,235,255,.34);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(45,235,255,.30),
+            rgba(45,235,255,.08)
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(45,235,255,.16),
+        0 12px 28px rgba(45,235,255,.09);
+}
+
+.instalacoes .btn-primary:hover {
+    border-color:
+        rgba(45,235,255,.55);
+
+    box-shadow:
+        0 0 0 4px rgba(45,235,255,.10),
+        0 0 30px rgba(45,235,255,.15);
+}
+
+
+/* ============================================================
+   DANGER
+   ============================================================ */
+
+.instalacoes .btn-danger {
+    border-color:
+        rgba(255,59,106,.28);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,59,106,.12),
+            rgba(255,59,106,.04)
+        );
+
+    color:
+        rgba(255,255,255,.90);
+}
+
+.instalacoes .btn-danger:hover {
+    border-color:
+        rgba(255,59,106,.48);
+
+    box-shadow:
+        0 0 0 4px rgba(255,59,106,.08),
+        0 0 26px rgba(255,59,106,.10);
+}
+
+
+/* ============================================================
+   SUCCESS
+   ============================================================ */
+
+.instalacoes .btn-success {
+    border-color:
+        rgba(40,233,140,.28);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(40,233,140,.12),
+            rgba(40,233,140,.04)
+        );
+
+    color:
+        rgba(255,255,255,.90);
+}
+
+.instalacoes .btn-success:hover {
+    border-color:
+        rgba(40,233,140,.48);
+
+    box-shadow:
+        0 0 0 4px rgba(40,233,140,.08),
+        0 0 26px rgba(40,233,140,.10);
+}
+
+
+/* ============================================================
+   WARNING
+   ============================================================ */
+
+.instalacoes .btn-warning {
+    border-color:
+        rgba(255,209,102,.30);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,209,102,.16),
+            rgba(255,209,102,.05)
+        );
+
+    color:
+        rgba(255,255,255,.92);
+}
+
+.instalacoes .btn-warning:hover {
+    border-color:
+        rgba(255,209,102,.52);
+
+    box-shadow:
+        0 0 0 4px rgba(255,209,102,.08),
+        0 0 26px rgba(255,209,102,.10);
+}
+
+
+/* ============================================================
+   TABELA
+   ============================================================ */
+
+.instalacoes .table-container {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    min-width: 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    border-radius: 18px;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    background:
+        rgba(0,0,0,.22);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.035);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(45,235,255,.30)
+        rgba(255,255,255,.04);
+}
+
+.instalacoes .table-container::-webkit-scrollbar {
+    height: 9px;
+}
+
+.instalacoes .table-container::-webkit-scrollbar-track {
+    background:
+        rgba(255,255,255,.035);
+}
+
+.instalacoes .table-container::-webkit-scrollbar-thumb {
+    background:
+        rgba(45,235,255,.24);
+
+    border-radius: 999px;
+
+    border: 2px solid transparent;
+
+    background-clip: padding-box;
+}
+
+.instalacoes .table-container::-webkit-scrollbar-thumb:hover {
+    background:
+        rgba(45,235,255,.38);
+
+    background-clip: padding-box;
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.instalacoes table {
+    width: 100%;
+
+    min-width: 1750px;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    color: var(--text);
+}
+
+.instalacoes thead th {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+    height: 44px;
+
+    padding: 0 12px;
+
+    text-align: left;
+
+    color:
+        rgba(255,255,255,.66);
+
+    background:
+        rgba(10,15,26,.86);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.10);
+
+    font-size: 10px;
+    font-weight: 950;
+
+    letter-spacing: .45px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.instalacoes tbody td {
+    padding: 9px 12px;
+
+    color:
+        rgba(255,255,255,.80);
+
+    background:
+        rgba(0,0,0,.10);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+    vertical-align: middle;
+}
+
+.instalacoes tbody tr {
+    transition:
+        background var(--t);
+}
+
+.instalacoes tbody tr:hover td {
+    background:
+        rgba(45,235,255,.035);
+}
+
+.instalacoes tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* ============================================================
+   INPUTS DA TABELA
+   ============================================================ */
+
+.instalacoes tbody .form-control {
+    height: 36px;
+
+    padding: 0 9px;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+
+    background:
+        rgba(0,0,0,.25);
+}
+
+.instalacoes tbody .form-control:focus {
+    box-shadow:
+        0 0 0 3px rgba(45,235,255,.08),
+        0 0 20px rgba(45,235,255,.07);
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.instalacoes .status-badge {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 27px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    font-size: 9px;
+    font-weight: 950;
+
+    letter-spacing: .5px;
+}
+
+.instalacoes .status-badge::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.50);
+}
+
+.instalacoes .status-ativo {
+    border-color:
+        rgba(40,233,140,.28);
+
+    color:
+        rgba(255,255,255,.88);
+
+    background:
+        rgba(40,233,140,.07);
+}
+
+.instalacoes .status-ativo::before {
+    background:
+        var(--ok);
+
+    box-shadow:
+        0 0 12px rgba(40,233,140,.45);
+
+    animation:
+        instalacoesPulseOk 1.6s ease-in-out infinite;
+}
+
+.instalacoes .status-inativo {
+    border-color:
+        rgba(255,59,106,.28);
+
+    color:
+        rgba(255,255,255,.80);
+
+    background:
+        rgba(255,59,106,.06);
+}
+
+.instalacoes .status-inativo::before {
+    background:
+        var(--danger);
+
+    box-shadow:
+        0 0 12px rgba(255,59,106,.35);
+}
+
+
+/* ============================================================
+   NÚMERO DE LICENÇAS
+   ============================================================ */
+
+.instalacoes .numero {
+    text-align: center;
+}
+
+.instalacoes .texto-destaque {
+    min-width: 30px;
+    height: 30px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 8px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid rgba(45,235,255,.20);
+
+    background:
+        rgba(45,235,255,.06);
+
+    color:
+        rgba(255,255,255,.90);
+
+    font-size: 12px;
+    font-weight: 950;
+
+    box-shadow:
+        0 0 15px rgba(45,235,255,.04);
+}
+
+
+/* ============================================================
+   CHAVE / CREDENCIAL
+   ============================================================ */
+
+.instalacoes .chave {
+    display: inline-block;
+
+    color:
+        rgba(255,255,255,.78);
+
+    font-family:
+        "Cascadia Code",
+        "Consolas",
+        monospace;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   SUBTEXTO
+   ============================================================ */
+
+.instalacoes .subtexto {
+    display: block;
+
+    margin-top: 4px;
+
+    color:
+        rgba(255,255,255,.43);
+
+    font-size: 10px;
+
+    line-height: 1.35;
+}
+
+
+/* ============================================================
+   DATA
+   ============================================================ */
+
+.instalacoes .data {
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   AÇÕES
+   ============================================================ */
+
+.instalacoes .acoes {
+    min-width: 320px;
+
+    white-space: nowrap;
+}
+
+.instalacoes .acoes form {
+    display: inline-flex;
+
+    margin:
+        0 0 0 5px;
+
+    vertical-align: middle;
+}
+
+.instalacoes .acoes form:first-child {
+    margin-left: 0;
+}
+
+.instalacoes .acoes .btn {
+    min-height: 34px;
+
+    padding: 7px 10px;
+
+    border-radius: 11px;
+
+    font-size: 10px;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.instalacoes .sem-dados {
+    position: relative;
+
+    z-index: 2;
+
+    min-height: 180px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    text-align: center;
+
+    background:
+        rgba(0,0,0,.15);
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   ANIMAÇÃO
+   ============================================================ */
+
+@keyframes instalacoesPulseOk {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(40,233,140,0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 7px rgba(40,233,140,.08);
+    }
+}
+
+
+/* ============================================================
+   DESKTOP GRANDE
+   ============================================================ */
+
+@media (min-width: 1200px) {
+
+    .instalacoes {
+        padding: 18px;
+    }
+
+    .instalacoes .form-grid {
+        gap: 12px;
+    }
+}
+
+
+/* ============================================================
+   NOTEBOOK / TABLET GRANDE
+   ============================================================ */
+
+@media (max-width: 1199px) {
+
+    .instalacoes .form-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .instalacoes .form-grid > div:last-child {
+        grid-column: auto;
+    }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .instalacoes .form-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .instalacoes .topbar {
+        min-height: 68px;
+    }
+
+    .instalacoes .header h2 {
+        font-size: 24px;
+    }
+}
+
+
+/* ============================================================
+   CELULAR
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .instalacoes {
+        padding: 10px;
+    }
+
+    .instalacoes .topbar {
+        min-height: 62px;
+
+        padding: 12px 14px;
+
+        border-radius: 20px;
+    }
+
+    .instalacoes .topbar h1 {
+        font-size: 17px;
+    }
+
+    .instalacoes .header {
+        padding:
+            14px 3px 10px;
+    }
+
+    .instalacoes .header h2 {
+        font-size: 22px;
+    }
+
+    .instalacoes .subtitle {
+        font-size: 12px;
+    }
+
+    .instalacoes .card {
+        border-radius: 20px;
+    }
+
+    .instalacoes .card-header {
+        min-height: 58px;
+
+        padding: 10px 12px;
+    }
+
+    .instalacoes .card-header h3 {
+        font-size: 15px;
+    }
+
+    .instalacoes .card-body {
+        padding: 12px;
+    }
+
+    .instalacoes .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .instalacoes .form-grid > div:last-child {
+        width: 100%;
+    }
+
+    .instalacoes .form-grid > div:last-child .btn {
+        width: 100%;
+    }
+
+    .instalacoes .table-container {
+        border-radius: 15px;
+    }
+
+    .instalacoes table {
+        min-width: 1550px;
+    }
+}
+
+
+/* ============================================================
+   CELULAR PEQUENO
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+    .instalacoes {
+        padding: 8px;
+    }
+
+    .instalacoes .topbar {
+        padding:
+            11px 12px;
+
+        border-radius: 18px;
+    }
+
+    .instalacoes .topbar h1 {
+        font-size: 16px;
+    }
+
+    .instalacoes .header h2 {
+        font-size: 21px;
+    }
+
+    .instalacoes .card-header {
+        gap: 8px;
+    }
+
+    .instalacoes .contador {
+        font-size: 10px;
+
+        padding:
+            5px 8px;
+    }
+}
+
+
+/* ============================================================
+   ACESSIBILIDADE
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .instalacoes *,
+    .instalacoes *::before,
+    .instalacoes *::after {
+        animation: none !important;
+
+        transition: none !important;
+    }
+}
+
