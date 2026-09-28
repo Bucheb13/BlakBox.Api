@@ -37,11 +37,7 @@ if (!builder.Environment.IsDevelopment())
         throw new InvalidOperationException(
             "AllowedHosts deve listar os domínios públicos da API; curingas não são aceitos em produção.");
     }
-    var keysPath = RequireSetting(builder.Configuration, "DataProtection:KeysPath", 1);
-    Directory.CreateDirectory(keysPath);
-    builder.Services.AddDataProtection()
-        .PersistKeysToFileSystem(new DirectoryInfo(keysPath))
-        .SetApplicationName("BlakBox.Api");
+
 }
 
 // =====================================================
