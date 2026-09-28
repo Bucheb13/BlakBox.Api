@@ -21,6 +21,8 @@ public class Cliente
 
     [MaxLength(300)]
     public string? Endereco { get; set; }
+
+    [MaxLength(50)]
     public string? Numero { get; set; }
     
     public bool Ativo { get; set; } = true;

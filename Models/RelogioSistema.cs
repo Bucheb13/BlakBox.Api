@@ -21,6 +21,17 @@ public static class RelogioSistema
             DateTimeKind.Unspecified);
     }
 
+    /// <summary>
+    /// Converte um UTC guardado como timestamp sem fuso para o horário de São Paulo.
+    /// </summary>
+    public static DateTime DeUtcSemFuso(DateTime horarioUtc)
+    {
+        var utc = DateTime.SpecifyKind(horarioUtc, DateTimeKind.Utc);
+        return DateTime.SpecifyKind(
+            TimeZoneInfo.ConvertTimeFromUtc(utc, Fuso),
+            DateTimeKind.Unspecified);
+    }
+
     private static TimeZoneInfo ObterFuso()
     {
         try

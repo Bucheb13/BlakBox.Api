@@ -35,7 +35,7 @@
 
         <div class="dashboard-date">
             <span>Atualizado</span>
-            <strong>@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</strong>
+            <strong>@BlakBox.Api.Models.RelogioSistema.Agora.ToString("dd/MM/yyyy HH:mm")</strong>
         </div>
 
     </div>
@@ -547,7 +547,7 @@
                             <tr>
 
                                 <td>
-                                    @requisicao.DataHora.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")
+                                    @BlakBox.Api.Models.RelogioSistema.DeUtcSemFuso(requisicao.DataHora).ToString("dd/MM/yyyy HH:mm:ss")
                                 </td>
 
                                 <td>

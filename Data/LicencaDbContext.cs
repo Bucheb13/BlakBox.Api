@@ -114,6 +114,14 @@ entity.Property(x =>
                 .HasMaxLength(30);
 
             entity.Property(x =>
+                x.Endereco)
+                .HasMaxLength(300);
+
+            entity.Property(x =>
+                x.Numero)
+                .HasMaxLength(50);
+
+            entity.Property(x =>
                 x.Ativo)
                 .IsRequired();
 

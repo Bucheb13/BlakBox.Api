@@ -326,8 +326,8 @@ public class IndexModel : PageModel
                 {
                     var itens =
                         requisicoesHora
-                            .Where(x =>
-                                    x.DataHora.ToLocalTime().Hour == hora)
+                        .Where(x =>
+                                    RelogioSistema.DeUtcSemFuso(x.DataHora).Hour == hora)
                             .ToList();
 
                     return new HoraDashboard
