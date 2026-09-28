@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +47,12 @@ public sealed class ArmazenamentoController : ControllerBase
             endpoint.Scheme != Uri.UriSchemeHttps)
             return BadRequest(new { sucesso = false, mensagem = "O endpoint R2 deve usar HTTPS." });
 
+        var slugOficina = CriarSlug(request.NomeOficina);
+        var slugEmUso = await _db.ConfiguracoesR2Instalacoes
+            .AnyAsync(x => x.InstalacaoId != instalacaoId && x.OficinaSlug == slugOficina);
+        if (slugEmUso)
+            return Conflict(new { sucesso = false, mensagem = "O nome da oficina gera um subdomínio já utilizado. Altere o nome da oficina para que o link público seja exclusivo." });
+
         var config = await _db.ConfiguracoesR2Instalacoes
             .SingleOrDefaultAsync(x => x.InstalacaoId == instalacaoId);
 
@@ -58,11 +67,23 @@ public sealed class ArmazenamentoController : ControllerBase
         config.AccessKeyProtegida = _protector.Protect(request.AccessKey.Trim());
         config.SecretKeyProtegida = _protector.Protect(request.SecretKey.Trim());
         config.PublicBaseUrl = request.PublicBaseUrl?.Trim().TrimEnd('/');
+        config.OficinaSlug = slugOficina;
         config.Ativo = request.Ativo;
         config.AtualizadoEm = BlakBox.Api.Models.RelogioSistema.Agora;
 
         await _db.SaveChangesAsync();
         return Ok(new { sucesso = true, mensagem = "Configuração R2 sincronizada." });
+    }
+
+    private static string CriarSlug(string nome)
+    {
+        var semAcentos = new string(nome.Normalize(NormalizationForm.FormD)
+            .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+            .ToArray()).Normalize(NormalizationForm.FormC).ToLowerInvariant();
+        var slug = Regex.Replace(semAcentos, "[^a-z0-9]+", "-").Trim('-');
+        if (slug.Length > 63)
+            slug = slug[..63].TrimEnd('-');
+        return string.IsNullOrWhiteSpace(slug) ? "oficina" : slug;
     }
 }
 
@@ -82,6 +103,9 @@ public sealed class ConfiguracaoR2Request
 
     [MaxLength(500)]
     public string? PublicBaseUrl { get; set; }
+
+    [Required, MaxLength(150)]
+    public string NomeOficina { get; set; } = string.Empty;
 
     public bool Ativo { get; set; }
 }

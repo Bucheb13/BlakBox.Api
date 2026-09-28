@@ -32,10 +32,15 @@ if (!builder.Environment.IsDevelopment())
     RequireSetting(builder.Configuration, "Admin_Username", 1);
     RequireSetting(builder.Configuration, "Admin_Password", 6);
     var allowedHosts = RequireSetting(builder.Configuration, "AllowedHosts", 1);
-    if (allowedHosts.Contains('*'))
+    var hostPatterns = allowedHosts.Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    if (hostPatterns.Any(host => host == "*" ||
+        (host.Contains('*') &&
+         (!host.StartsWith("*.", StringComparison.Ordinal) ||
+          host.Count(character => character == '*') != 1 ||
+          host.Length <= 2))))
     {
         throw new InvalidOperationException(
-            "AllowedHosts deve listar os domínios públicos da API; curingas não são aceitos em produção.");
+            "AllowedHosts deve listar hosts específicos e pode usar curingas de subdomínio; não use o curinga global '*'.");
     }
 
 }
@@ -184,6 +189,16 @@ builder.Services.AddRateLimiter(options =>
                 QueueLimit = 0,
                 AutoReplenishment = true
             }));
+    options.AddPolicy("public-quotes", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 60,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
     options.AddPolicy("admin-login", context =>
         RateLimitPartition.GetFixedWindowLimiter(
             context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
@@ -214,6 +229,7 @@ builder.Services.AddScoped<ClienteGestaoService>();
 builder.Services.AddScoped<InstalacaoGestaoService>();
 
 builder.Services.AddScoped<PlanoGestaoService>();
+builder.Services.AddScoped<OrcamentoPublicoService>();
 builder.Services.AddHostedService<ApiRequisicaoLimpezaService>();
 
 
@@ -244,9 +260,12 @@ await using (var scope = app.Services.CreateAsyncScope())
             "AccessKeyProtegida" character varying(2000),
             "SecretKeyProtegida" character varying(4000),
             "PublicBaseUrl" character varying(500),
+            "OficinaSlug" character varying(63),
             "Ativo" boolean NOT NULL DEFAULT FALSE,
             "AtualizadoEm" timestamp without time zone NOT NULL
         );
+        ALTER TABLE "ConfiguracaoR2Instalacao"
+            ADD COLUMN IF NOT EXISTS "OficinaSlug" character varying(63);
         """);
 }
 

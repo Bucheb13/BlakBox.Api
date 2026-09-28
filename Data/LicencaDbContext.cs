@@ -471,10 +471,11 @@ modelBuilder.Entity<Licenca>(entity =>
             entity.Property(x => x.AccessKeyProtegida).HasMaxLength(2000);
             entity.Property(x => x.SecretKeyProtegida).HasMaxLength(4000);
             entity.Property(x => x.PublicBaseUrl).HasMaxLength(500);
+            entity.Property(x => x.OficinaSlug).HasMaxLength(63);
             entity.Property(x => x.AtualizadoEm)
                 .HasColumnType("timestamp without time zone")
                 .IsRequired();
-            entity.HasOne<Instalacao>()
+            entity.HasOne(x => x.Instalacao)
                 .WithMany()
                 .HasForeignKey(x => x.InstalacaoId)
                 .OnDelete(DeleteBehavior.Cascade);
