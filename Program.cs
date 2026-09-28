@@ -29,8 +29,8 @@ if (!builder.Environment.IsDevelopment())
             "ConnectionStrings:Default deve ter host, banco, usuário, senha e SSL habilitado.");
     }
 
-    RequireSetting(builder.Configuration, "Admin:Username", 1);
-    RequireSetting(builder.Configuration, "Admin:Password", 6);
+    RequireSetting(builder.Configuration, "Admin_Username", 1);
+    RequireSetting(builder.Configuration, "Admin_Password", 6);
     var allowedHosts = RequireSetting(builder.Configuration, "AllowedHosts", 1);
     if (allowedHosts.Contains('*'))
     {
