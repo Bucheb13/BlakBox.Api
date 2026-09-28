@@ -3,7 +3,7 @@ using BlakBox.Api.Models;
 
 namespace BlakBox.Api.Data;
 
-public class LicencaDbContext : DbContext
+public class LicencaDbContext : DbContext, Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.IDataProtectionKeyContext
 {
     public LicencaDbContext(
         DbContextOptions<LicencaDbContext> options)
@@ -33,6 +33,12 @@ public DbSet<CredencialInstalacao> CredenciaisInstalacao =>
     Set<CredencialInstalacao>();
     public DbSet<ApiRequisicao> ApiRequisicoes =>
     Set<ApiRequisicao>();
+
+    public DbSet<ConfiguracaoR2Instalacao> ConfiguracoesR2Instalacoes =>
+        Set<ConfiguracaoR2Instalacao>();
+
+    public DbSet<Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey> DataProtectionKeys =>
+        Set<Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey>();
 
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
@@ -454,6 +460,32 @@ modelBuilder.Entity<Licenca>(entity =>
             entity.HasIndex(x => x.Operacao);
             entity.HasIndex(x => x.Aplicacao);
             entity.HasIndex(x => x.CorrelationId);
+        });
+
+        modelBuilder.Entity<ConfiguracaoR2Instalacao>(entity =>
+        {
+            entity.ToTable("ConfiguracaoR2Instalacao");
+            entity.HasKey(x => x.InstalacaoId);
+            entity.Property(x => x.Endpoint).HasMaxLength(500);
+            entity.Property(x => x.Bucket).HasMaxLength(150);
+            entity.Property(x => x.AccessKeyProtegida).HasMaxLength(2000);
+            entity.Property(x => x.SecretKeyProtegida).HasMaxLength(4000);
+            entity.Property(x => x.PublicBaseUrl).HasMaxLength(500);
+            entity.Property(x => x.AtualizadoEm)
+                .HasColumnType("timestamp without time zone")
+                .IsRequired();
+            entity.HasOne<Instalacao>()
+                .WithMany()
+                .HasForeignKey(x => x.InstalacaoId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey>(entity =>
+        {
+            entity.ToTable("DataProtectionKeys");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.FriendlyName).HasMaxLength(450);
+            entity.Property(x => x.Xml).HasColumnType("text");
         });
 
 
