@@ -9,34 +9,53 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
     <title>Entrar - BlakBox</title>
     <style>
-        body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1220;color:#e8eef8;font:16px system-ui,sans-serif}
-        main{width:min(380px,calc(100% - 40px));padding:32px;border:1px solid #263449;border-radius:16px;background:#111c2d}
-        h1{margin-top:0}label{display:block;margin:18px 0 6px}input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #40516a;border-radius:8px;background:#08111e;color:#fff}
-        button{width:100%;margin-top:24px;padding:12px;border:0;border-radius:8px;background:#2bc5b4;color:#06111b;font-weight:700;cursor:pointer}.erro{color:#ff9a9a}
+        :root{color-scheme:dark;--bg:#080e19;--panel:#111d2e;--stroke:rgba(174,198,224,.15);--text:#edf4fc;--muted:#9aabc0;--accent:#62d7c5;--danger:#ff9da7}
+        *{box-sizing:border-box}
+        body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 18% 20%,rgba(48,132,151,.2),transparent 36%),radial-gradient(ellipse at 90% 82%,rgba(40,189,167,.1),transparent 34%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+        .login-shell{width:min(100%,980px);min-height:560px;display:grid;grid-template-columns:1.05fr .95fr;overflow:hidden;border:1px solid var(--stroke);border-radius:26px;background:rgba(17,29,46,.88);box-shadow:0 28px 90px rgba(0,0,0,.38)}
+        .intro{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:48px;background:linear-gradient(145deg,rgba(20,42,58,.86),rgba(12,23,38,.96))}
+        .intro:after{content:"";position:absolute;width:310px;height:310px;right:-110px;bottom:42px;border:1px solid rgba(98,215,197,.15);border-radius:50%;box-shadow:0 0 0 34px rgba(98,215,197,.025),0 0 0 68px rgba(98,215,197,.02);pointer-events:none}
+        .brand{display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(98,215,197,.28);border-radius:14px;background:rgba(98,215,197,.1);color:var(--accent);font-size:14px;font-weight:850;letter-spacing:.04em}.brand-name{font-size:17px;font-weight:750;letter-spacing:-.02em}.brand-caption{display:block;margin-top:1px;color:var(--muted);font-size:12px}
+        .intro-copy{position:relative;z-index:1;max-width:390px;margin:50px 0}.eyebrow{color:var(--accent);font-size:11px;font-weight:750;letter-spacing:.14em;text-transform:uppercase}.intro h1{margin:14px 0;font-size:clamp(30px,4vw,43px);line-height:1.12;letter-spacing:-.045em}.intro-copy p,.intro-foot{color:var(--muted)}.intro-copy p{max-width:350px;margin:0;font-size:15px}.intro-foot{font-size:12px}
+        .form-panel{display:flex;align-items:center;padding:clamp(30px,6vw,66px)}.form-inner{width:100%;max-width:360px;margin:auto}.form-inner h2{margin:0;font-size:25px;letter-spacing:-.035em}.form-lead{margin:8px 0 28px;color:var(--muted);font-size:13px}.field{margin-top:19px}.field label{display:block;margin-bottom:8px;color:#c7d3e1;font-size:12px;font-weight:700}.field input{width:100%;height:46px;padding:0 13px;border:1px solid rgba(174,198,224,.2);border-radius:11px;outline:none;background:#0a1422;color:var(--text);font:inherit;transition:border-color .16s,box-shadow .16s}.field input:focus{border-color:rgba(98,215,197,.8);box-shadow:0 0 0 3px rgba(98,215,197,.13)}.submit{width:100%;height:46px;margin-top:26px;border:0;border-radius:11px;background:var(--accent);color:#06221e;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:filter .16s,transform .16s}.submit:hover{filter:brightness(1.06);transform:translateY(-1px)}.submit:focus-visible{outline:3px solid rgba(98,215,197,.38);outline-offset:3px}.error{margin:0 0 18px;padding:11px 13px;border:1px solid rgba(255,157,167,.2);border-radius:10px;background:rgba(255,95,111,.08);color:var(--danger);font-size:13px}.unavailable{color:var(--muted);font-size:13px}
+        @@media(max-width:720px){body{padding:14px}.login-shell{min-height:auto;grid-template-columns:1fr;border-radius:20px}.intro{min-height:200px;padding:25px 26px}.intro-copy{margin:34px 0 8px}.intro h1{font-size:29px}.intro-copy p{font-size:13px}.intro-foot{display:none}.intro:after{width:190px;height:190px;right:-90px;bottom:-80px}.form-panel{padding:30px 26px 34px}}
+        @@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
     </style>
 </head>
 <body>
-<main>
-    <h1>BlakBox</h1>
-    <p>Entre na Central de Licenciamento.</p>
-    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
-    {
-        <p class="erro" role="alert">@Model.ErrorMessage</p>
-    }
-    @if (Model.ConfiguracaoDisponivel)
-    {
-        <form method="post">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="returnUrl" value="@returnUrl" />
-            <label for="username">Usuário</label>
-            <input id="username" name="Username" autocomplete="username" required maxlength="100" />
-            <label for="password">Senha</label>
-            <input id="password" name="Password" type="password" autocomplete="current-password" required />
-            <button type="submit">Entrar</button>
-        </form>
-    }
-</main>
+    <main class="login-shell">
+        <section class="intro" aria-label="BlakBox">
+            <div class="brand"><span class="logo" aria-hidden="true">BB</span><div><span class="brand-name">BlakBox</span><span class="brand-caption">Central de Licenciamento</span></div></div>
+            <div class="intro-copy"><span class="eyebrow">Painel administrativo</span><h1>Controle suas licenças em um só lugar.</h1><p>Gerencie clientes, instalações, planos e validade com clareza.</p></div>
+            <div class="intro-foot">Acesso seguro à administração BlakBox</div>
+        </section>
+        <section class="form-panel" aria-labelledby="login-title">
+            <div class="form-inner">
+                <h2 id="login-title">Bem-vindo de volta</h2>
+                <p class="form-lead">Entre com suas credenciais para continuar.</p>
+                @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                {
+                    <p class="error" role="alert">@Model.ErrorMessage</p>
+                }
+                @if (Model.ConfiguracaoDisponivel)
+                {
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <div class="field"><label for="username">Usuário</label><input id="username" name="Username" autocomplete="username" required maxlength="100" autofocus /></div>
+                        <div class="field"><label for="password">Senha</label><input id="password" name="Password" type="password" autocomplete="current-password" required /></div>
+                        <button class="submit" type="submit">Entrar na central</button>
+                    </form>
+                }
+                else
+                {
+                    <p class="unavailable">O acesso está temporariamente indisponível. Entre em contato com o administrador.</p>
+                }
+            </div>
+        </section>
+    </main>
 </body>
 </html>

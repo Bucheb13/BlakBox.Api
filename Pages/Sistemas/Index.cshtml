@@ -97,7 +97,7 @@
                                    name="Codigo"
                                    class="form-control"
                                    maxlength="50"
-                                   placeholder="EX: OFICINAWEB"
+                                   placeholder="EX: TORQUE"
                                    autocomplete="off"
                                    required />
 
@@ -128,23 +128,6 @@
                             <input type="number"
                                    id="DiasTolerancia"
                                    name="DiasTolerancia"
-                                   class="form-control"
-                                   min="0"
-                                   max="3650"
-                                   value="5"
-                                   required />
-
-                        </div>
-
-                        <div class="campo">
-
-                            <label for="DiasOffline">
-                                Offline (dias)
-                            </label>
-
-                            <input type="number"
-                                   id="DiasOffline"
-                                   name="DiasOffline"
                                    class="form-control"
                                    min="0"
                                    max="3650"
@@ -246,10 +229,6 @@
                                 </th>
 
                                 <th>
-                                    Offline
-                                </th>
-
-                                <th>
                                     Planos
                                 </th>
 
@@ -334,19 +313,6 @@
                                         <input type="number"
                                                name="diasTolerancia"
                                                value="@sistema.DiasTolerancia"
-                                               class="form-control"
-                                               min="0"
-                                               max="3650"
-                                               required
-                                               form="form-salvar-@sistema.SistemaId" />
-
-                                    </td>
-
-                                    <td class="numero">
-
-                                        <input type="number"
-                                               name="diasOffline"
-                                               value="@sistema.DiasOffline"
                                                class="form-control"
                                                min="0"
                                                max="3650"

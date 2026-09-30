@@ -29,9 +29,6 @@ public class IndexModel : PageModel
     public int DiasTolerancia { get; set; } = 5;
 
     [BindProperty]
-    public int DiasOffline { get; set; } = 5;
-
-    [BindProperty]
     public int SistemaId { get; set; }
 
     public async Task OnGetAsync()
@@ -47,8 +44,7 @@ public class IndexModel : PageModel
                 await _gestaoService.CriarAsync(
                     Codigo,
                     Nome,
-                    DiasTolerancia,
-                    DiasOffline);
+                    DiasTolerancia);
 
             TempData["Sucesso"] =
                 $"Sistema \"{sistema.Nome}\" criado com sucesso.";
@@ -70,8 +66,7 @@ public class IndexModel : PageModel
         int sistemaId,
         string codigo,
         string nome,
-        int diasTolerancia,
-        int diasOffline)
+        int diasTolerancia)
     {
         try
         {
@@ -79,8 +74,7 @@ public class IndexModel : PageModel
                 sistemaId,
                 codigo,
                 nome,
-                diasTolerancia,
-                diasOffline);
+                diasTolerancia);
 
             TempData["Sucesso"] =
                 "Sistema atualizado com sucesso.";

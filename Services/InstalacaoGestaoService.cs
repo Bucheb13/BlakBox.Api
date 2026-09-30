@@ -18,6 +18,7 @@ public class InstalacaoGestaoService
     {
         return await _context.Instalacoes
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Cliente)
             .Include(x => x.Sistema)
             .Include(x => x.Licencas)
@@ -31,6 +32,7 @@ public class InstalacaoGestaoService
         int instalacaoId)
     {
         return await _context.Instalacoes
+            .AsSplitQuery()
             .Include(x => x.Cliente)
             .Include(x => x.Sistema)
             .Include(x => x.Licencas)
@@ -120,7 +122,7 @@ public class InstalacaoGestaoService
      * SINCRONIZAR INSTALAÇÃO
      * ============================================================
      *
-     * Utilizado pelo OficinaWeb.
+     * Utilizado pelo BlakBox.Torque.
      *
      * A identidade:
      *
@@ -129,7 +131,7 @@ public class InstalacaoGestaoService
      * permanece imutável.
      *
      * O NomeInstalacao pode ser atualizado porque ele vem
-     * diretamente do OficinaWeb.
+     * diretamente do BlakBox.Torque.
      */
     public async Task<Instalacao> SincronizarAsync(
         int instalacaoId,

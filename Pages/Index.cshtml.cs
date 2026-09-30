@@ -95,8 +95,8 @@ public class IndexModel : PageModel
         var agora = RelogioSistema.Agora;
         var inicioHojeLocal = RelogioSistema.Agora.Date;
         var inicioAmanhaLocal = inicioHojeLocal.AddDays(1);
-        var inicioHojeUtc = RelogioSistema.ParaUtcSemFuso(inicioHojeLocal);
-        var inicioAmanhaUtc = RelogioSistema.ParaUtcSemFuso(inicioAmanhaLocal);
+        var inicioHojeUtc = RelogioSistema.ParaUtc(inicioHojeLocal);
+        var inicioAmanhaUtc = RelogioSistema.ParaUtc(inicioAmanhaLocal);
 
         // ========================================================
         // RESUMO
@@ -210,9 +210,12 @@ public class IndexModel : PageModel
             await _context.Licencas
                 .AsNoTracking()
                 .CountAsync(x =>
-                    x.DataVencimento.HasValue &&
-                    x.DataVencimento.Value < agora &&
-                    x.Ativa);
+                    x.Ativa &&
+                    x.SituacaoComercial != Licenca.SituacaoCancelada &&
+                    (x.Instalacao != null
+                        ? x.DataVencimento.HasValue &&
+                          x.DataVencimento.Value.AddDays(x.Instalacao.Sistema.DiasTolerancia) < agora
+                        : x.ValidaAte.HasValue && x.ValidaAte.Value < agora));
 
         // ========================================================
         // LICENÇAS VENCENDO
@@ -327,7 +330,7 @@ public class IndexModel : PageModel
                     var itens =
                         requisicoesHora
                         .Where(x =>
-                                    RelogioSistema.DeUtcSemFuso(x.DataHora).Hour == hora)
+                                    RelogioSistema.DeUtc(x.DataHora).Hour == hora)
                             .ToList();
 
                     return new HoraDashboard

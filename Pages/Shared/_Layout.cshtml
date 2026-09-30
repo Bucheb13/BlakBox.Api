@@ -73,6 +73,12 @@
 
     @await RenderSectionAsync("Styles", required: false)
 
+    <link
+        rel="stylesheet"
+        href="~/css/admin-redesign.css"
+        asp-append-version="true"
+    />
+
 </head>
 
 <body>
@@ -121,7 +127,9 @@
             class="menu-toggle btn secondary"
             type="button"
             aria-controls="sidebar"
-            aria-expanded="false">
+            aria-expanded="true"
+            aria-label="Recolher navegação"
+            title="Recolher ou abrir navegação">
 
             <span class="menu-icon">☰</span>
 
@@ -140,7 +148,7 @@
 
                     <span class="status-dot"></span>
 
-                    API online
+                    Central administrativa
 
                 </span>
 
@@ -214,6 +222,8 @@
                  NAVEGAÇÃO
                  ================================================= -->
 
+            <nav aria-label="Navegação principal">
+
             <div class="sidebar-section">
 
                 <div class="sidebar-title">
@@ -223,7 +233,8 @@
 
                 <a
                     class="nav-link @(IsHere("/") ? "active" : "")"
-                    href="/">
+                    href="/"
+                    title="Dashboard">
 
                     <span class="nav-icon">
                         📊
@@ -238,7 +249,8 @@
 
                 <a
                     class="nav-link @(IsHere("/Clientes") ? "active" : "")"
-                    href="/Clientes">
+                    href="/Clientes"
+                    title="Clientes">
 
                     <span class="nav-icon">
                         👥
@@ -253,7 +265,8 @@
 
                 <a
                     class="nav-link @(IsHere("/Instalacoes") ? "active" : "")"
-                    href="/Instalacoes">
+                    href="/Instalacoes"
+                    title="Instalações">
 
                     <span class="nav-icon">
                         🖥️
@@ -281,7 +294,8 @@
 
                 <a
                     class="nav-link @(IsHere("/Licencas") ? "active" : "")"
-                    href="/Licencas">
+                    href="/Licencas"
+                    title="Licenças">
 
                     <span class="nav-icon">
                         🔑
@@ -296,7 +310,8 @@
 
                 <a
                     class="nav-link @(IsHere("/Planos") ? "active" : "")"
-                    href="/Planos">
+                    href="/Planos"
+                    title="Planos">
 
                     <span class="nav-icon">
                         💳
@@ -311,7 +326,8 @@
 
                 <a
                     class="nav-link @(IsHere("/Sistemas") ? "active" : "")"
-                    href="/Sistemas">
+                    href="/Sistemas"
+                    title="Sistemas">
 
                     <span class="nav-icon">
                         ⚙️
@@ -324,6 +340,8 @@
                 </a>
 
             </div>
+
+            </nav>
 
             <!-- =================================================
                  RODAPÉ DA SIDEBAR

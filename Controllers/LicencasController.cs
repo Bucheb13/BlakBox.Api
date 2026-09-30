@@ -1124,9 +1124,6 @@ public class LicencaController : ControllerBase
                 sistema?.DiasTolerancia ??
                 0,
 
-            DiasOffline =
-                sistema?.DiasOffline ??
-                0
         };
     }
 

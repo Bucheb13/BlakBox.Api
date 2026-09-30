@@ -18,6 +18,7 @@ public class SistemaGestaoService
     {
         return await _context.Sistemas
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Planos)
             .Include(x => x.Instalacoes)
             .OrderBy(x => x.Nome)
@@ -35,8 +36,7 @@ public class SistemaGestaoService
     public async Task<Sistema> CriarAsync(
         string codigo,
         string nome,
-        int diasTolerancia,
-        int diasOffline)
+        int diasTolerancia)
     {
         codigo = NormalizarCodigo(codigo);
         nome = NormalizarNome(nome);
@@ -44,8 +44,7 @@ public class SistemaGestaoService
         ValidarDados(
             codigo,
             nome,
-            diasTolerancia,
-            diasOffline);
+            diasTolerancia);
 
         var codigoExiste =
             await _context.Sistemas
@@ -65,7 +64,6 @@ public class SistemaGestaoService
                 Nome = nome,
                 Ativo = true,
                 DiasTolerancia = diasTolerancia,
-                DiasOffline = diasOffline,
                 CriadoEm = RelogioSistema.Agora
             };
 
@@ -81,8 +79,7 @@ public class SistemaGestaoService
         int sistemaId,
         string codigo,
         string nome,
-        int diasTolerancia,
-        int diasOffline)
+        int diasTolerancia)
     {
         var sistema =
             await ObterAsync(sistemaId);
@@ -99,8 +96,7 @@ public class SistemaGestaoService
         ValidarDados(
             codigo,
             nome,
-            diasTolerancia,
-            diasOffline);
+            diasTolerancia);
 
         var codigoExiste =
             await _context.Sistemas
@@ -123,9 +119,6 @@ public class SistemaGestaoService
 
         sistema.DiasTolerancia =
             diasTolerancia;
-
-        sistema.DiasOffline =
-            diasOffline;
 
         await _context.SaveChangesAsync();
     }
@@ -205,8 +198,7 @@ public class SistemaGestaoService
     private static void ValidarDados(
         string codigo,
         string nome,
-        int diasTolerancia,
-        int diasOffline)
+        int diasTolerancia)
     {
         if (codigo.Length > 50)
         {
@@ -232,17 +224,6 @@ public class SistemaGestaoService
                 "Os dias de tolerância não podem ultrapassar 3650 dias.");
         }
 
-        if (diasOffline < 0)
-        {
-            throw new InvalidOperationException(
-                "Os dias offline não podem ser negativos.");
-        }
-
-        if (diasOffline > 3650)
-        {
-            throw new InvalidOperationException(
-                "Os dias offline não podem ultrapassar 3650 dias.");
-        }
     }
 }
 

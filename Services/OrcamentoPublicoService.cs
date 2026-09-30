@@ -100,10 +100,12 @@ public sealed class OrcamentoPublicoService
             string.IsNullOrWhiteSpace(config.SecretKeyProtegida))
             throw new InvalidOperationException("Configuração R2 incompleta.");
 
-        var endpoint = new Uri(config.Endpoint);
+        if (!R2EndpointValidator.TryValidate(config.Endpoint, out var endpoint))
+            throw new InvalidOperationException("O endpoint salvo para Cloudflare R2 não é válido.");
+
         var s3Config = new AmazonS3Config
         {
-            ServiceURL = endpoint.ToString(),
+            ServiceURL = endpoint!.ToString(),
             ForcePathStyle = true,
             AuthenticationRegion = "auto"
         };

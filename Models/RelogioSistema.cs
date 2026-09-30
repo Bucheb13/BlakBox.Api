@@ -13,18 +13,17 @@ public static class RelogioSistema
             TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Fuso),
             DateTimeKind.Unspecified);
 
-    public static DateTime ParaUtcSemFuso(DateTime horarioLocal)
+    public static DateTime ParaUtc(DateTime horarioLocal)
     {
         var local = DateTime.SpecifyKind(horarioLocal, DateTimeKind.Unspecified);
-        return DateTime.SpecifyKind(
-            TimeZoneInfo.ConvertTimeToUtc(local, Fuso),
-            DateTimeKind.Unspecified);
+        return TimeZoneInfo.ConvertTimeToUtc(local, Fuso);
     }
 
     /// <summary>
     /// Converte um UTC guardado como timestamp sem fuso para o horário de São Paulo.
     /// </summary>
-    public static DateTime DeUtcSemFuso(DateTime horarioUtc)
+    /// <summary>Converts a UTC instant to São Paulo local time.</summary>
+    public static DateTime DeUtc(DateTime horarioUtc)
     {
         var utc = DateTime.SpecifyKind(horarioUtc, DateTimeKind.Utc);
         return DateTime.SpecifyKind(

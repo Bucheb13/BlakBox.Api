@@ -1,229 +1,92 @@
-/* ============================================================
-   BLAKBOX — SITE
-   JAVASCRIPT GLOBAL
-   ============================================================ */
-
 (function () {
-
     "use strict";
 
+    function initializeNavigation() {
+        const sidebar = document.getElementById("sidebar");
+        const backdrop = document.getElementById("backdrop");
+        const menuButton = document.querySelector(".menu-toggle");
 
-    /* ========================================================
-       ELEMENTOS
-       ======================================================== */
+        if (!sidebar || !backdrop || !menuButton) return;
 
-    const sidebar =
-        document.getElementById("sidebar");
+        const mobileLayout = window.matchMedia("(max-width: 980px)");
 
-    const backdrop =
-        document.getElementById("backdrop");
-
-    const menuButton =
-        document.querySelector(".menu-toggle");
-
-
-    if (!sidebar || !backdrop || !menuButton) {
-        return;
-    }
-
-
-    /* ========================================================
-       BACKDROP
-       ======================================================== */
-
-    function setBackdrop(open) {
-
-        backdrop.hidden = !open;
-
-        backdrop.style.pointerEvents =
-            open ? "auto" : "none";
-
-        document.body.classList.toggle(
-            "overlay-open",
-            open
-        );
-    }
-
-
-    /* ========================================================
-       FECHAR MENU
-       ======================================================== */
-
-    function closeMenu() {
-
-        sidebar.classList.remove("open");
-
-        menuButton.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-
-        setBackdrop(false);
-    }
-
-
-    /* ========================================================
-       ABRIR MENU
-       ======================================================== */
-
-    function openMenu() {
-
-        sidebar.classList.add("open");
-
-        menuButton.setAttribute(
-            "aria-expanded",
-            "true"
-        );
-
-        setBackdrop(true);
-    }
-
-
-    /* ========================================================
-       TOGGLE
-       ======================================================== */
-
-    menuButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            const isOpen =
-                sidebar.classList.contains("open");
-
-            if (isOpen) {
-                closeMenu();
-            }
-            else {
-                openMenu();
-            }
+        function isMobileMenuOpen() {
+            return sidebar.classList.contains("open");
         }
-    );
 
-
-    /* ========================================================
-       BACKDROP
-       ======================================================== */
-
-    backdrop.addEventListener(
-        "click",
-        function () {
-
-            closeMenu();
+        function setBackdrop(open) {
+            backdrop.hidden = !open;
+            document.body.classList.toggle("overlay-open", open);
         }
-    );
 
+        function updateAccessibleState() {
+            const expanded = mobileLayout.matches
+                ? isMobileMenuOpen()
+                : !document.body.classList.contains("sidebar-collapsed");
 
-    /* ========================================================
-       FECHAR AO CLICAR NA NAVEGAÇÃO
-       ======================================================== */
+            menuButton.setAttribute("aria-expanded", String(expanded));
+            menuButton.setAttribute(
+                "aria-label",
+                expanded ? "Recolher navegação" : "Abrir navegação");
 
-    sidebar.addEventListener(
-        "click",
-        function (event) {
+            sidebar.toggleAttribute(
+                "inert",
+                mobileLayout.matches && !isMobileMenuOpen());
+        }
 
-            const link =
-                event.target.closest(".nav-link");
+        function closeMobileMenu() {
+            sidebar.classList.remove("open");
+            setBackdrop(false);
+            updateAccessibleState();
+        }
 
-            if (!link) {
+        menuButton.addEventListener("click", function () {
+            if (mobileLayout.matches) {
+                if (isMobileMenuOpen()) {
+                    closeMobileMenu();
+                } else {
+                    sidebar.classList.add("open");
+                    setBackdrop(true);
+                    updateAccessibleState();
+                }
                 return;
             }
 
-            closeMenu();
-        }
-    );
+            document.body.classList.toggle("sidebar-collapsed");
+            updateAccessibleState();
+        });
 
+        backdrop.addEventListener("click", closeMobileMenu);
 
-    /* ========================================================
-       ESC
-       ======================================================== */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (event.key === "Escape") {
-                closeMenu();
+        sidebar.addEventListener("click", function (event) {
+            if (event.target.closest(".nav-link") && mobileLayout.matches) {
+                closeMobileMenu();
             }
-        }
-    );
+        });
 
-
-    /* ========================================================
-       RIPPLE
-       ======================================================== */
-
-    document.addEventListener(
-        "pointerdown",
-        function (event) {
-
-            const target =
-                event.target.closest(
-                    ".btn, .nav-link"
-                );
-
-            if (!target) {
-                return;
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && isMobileMenuOpen()) {
+                closeMobileMenu();
+                menuButton.focus();
             }
+        });
 
-            const rect =
-                target.getBoundingClientRect();
-
-            const x =
-                event.clientX - rect.left;
-
-            const y =
-                event.clientY - rect.top;
-
-            const ripple =
-                document.createElement("span");
-
-            ripple.className =
-                "ripple";
-
-            ripple.style.left =
-                x + "px";
-
-            ripple.style.top =
-                y + "px";
-
-            target.appendChild(ripple);
-
-
-            window.setTimeout(
-                function () {
-
-                    try {
-                        ripple.remove();
-                    }
-                    catch (_) {
-                    }
-
-                },
-                700
-            );
-        },
-        {
-            passive: true
-        }
-    );
-
-
-    /* ========================================================
-       CORRIGE ESTADO AO VOLTAR PARA DESKTOP
-       ======================================================== */
-
-    window.addEventListener(
-        "resize",
-        function () {
-
-            if (window.innerWidth > 980) {
-
-                closeMenu();
+        mobileLayout.addEventListener("change", function (event) {
+            if (!event.matches) {
+                sidebar.classList.remove("open");
+                setBackdrop(false);
+            } else {
+                document.body.classList.remove("sidebar-collapsed");
             }
-        }
-    );
+            updateAccessibleState();
+        });
 
+        updateAccessibleState();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initializeNavigation, { once: true });
+    } else {
+        initializeNavigation();
+    }
 })();

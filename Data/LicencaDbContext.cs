@@ -84,9 +84,6 @@ public DbSet<CredencialInstalacao> CredenciaisInstalacao =>
     x.DiasTolerancia)
     .IsRequired();
 
-entity.Property(x =>
-    x.DiasOffline)
-    .IsRequired();
         });
 
         /*
@@ -431,8 +428,9 @@ modelBuilder.Entity<Licenca>(entity =>
         {
             entity.ToTable("ApiRequisicao");
             entity.HasKey(x => x.ApiRequisicaoId);
+            // DataHora registra instantes UTC; os demais DateTime do sistema são horários locais de negócio.
             entity.Property(x => x.DataHora)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .IsRequired();
             entity.Property(x => x.Metodo).HasMaxLength(10).IsRequired();
             entity.Property(x => x.Rota).HasMaxLength(300).IsRequired();
@@ -504,6 +502,12 @@ modelBuilder.Entity<Licenca>(entity =>
                 if (property.ClrType == typeof(DateTime) ||
                     property.ClrType == typeof(DateTime?))
                 {
+                    if (entityType.ClrType == typeof(ApiRequisicao) &&
+                        property.Name == nameof(ApiRequisicao.DataHora))
+                    {
+                        continue;
+                    }
+
                     property.SetColumnType("timestamp without time zone");
                 }
             }

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using BlakBox.Api.Authentication;
 using BlakBox.Api.Data;
 using BlakBox.Api.Models;
+using BlakBox.Api.Services;
 
 namespace BlakBox.Api.Controllers;
 
@@ -43,9 +45,36 @@ public sealed class ArmazenamentoController : ControllerBase
             string.IsNullOrWhiteSpace(request.SecretKey))
             return BadRequest(new { sucesso = false, mensagem = "A configuração R2 está incompleta." });
 
-        if (!Uri.TryCreate(request.Endpoint, UriKind.Absolute, out var endpoint) ||
-            endpoint.Scheme != Uri.UriSchemeHttps)
-            return BadRequest(new { sucesso = false, mensagem = "O endpoint R2 deve usar HTTPS." });
+        if (!R2EndpointValidator.TryValidate(request.Endpoint, out var endpoint))
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = "Informe o endpoint HTTPS oficial da conta Cloudflare R2."
+            });
+
+        var publicBaseUrl = request.PublicBaseUrl?.Trim();
+        if (!string.IsNullOrWhiteSpace(publicBaseUrl))
+        {
+            if (!Uri.TryCreate(publicBaseUrl, UriKind.Absolute, out var publicUri) ||
+                publicUri.Scheme != Uri.UriSchemeHttps ||
+                !publicUri.IsDefaultPort ||
+                !string.IsNullOrEmpty(publicUri.UserInfo) ||
+                !string.IsNullOrEmpty(publicUri.Query) ||
+                !string.IsNullOrEmpty(publicUri.Fragment) ||
+                IPAddress.TryParse(publicUri.Host, out _) ||
+                string.Equals(publicUri.Host, "localhost", StringComparison.OrdinalIgnoreCase) ||
+                publicUri.Host.EndsWith(".localhost", StringComparison.OrdinalIgnoreCase) ||
+                publicUri.Host.EndsWith(".local", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new
+                {
+                    sucesso = false,
+                    mensagem = "A URL pública deve ser HTTPS, sem credenciais ou parâmetros, e usar um domínio público válido."
+                });
+            }
+
+            publicBaseUrl = publicUri.GetLeftPart(UriPartial.Path).TrimEnd('/');
+        }
 
         var slugOficina = CriarSlug(request.NomeOficina);
         var slugEmUso = await _db.ConfiguracoesR2Instalacoes
@@ -62,11 +91,11 @@ public sealed class ArmazenamentoController : ControllerBase
             _db.ConfiguracoesR2Instalacoes.Add(config);
         }
 
-        config.Endpoint = endpoint.ToString().TrimEnd('/');
+        config.Endpoint = endpoint!.ToString().TrimEnd('/');
         config.Bucket = request.Bucket.Trim();
         config.AccessKeyProtegida = _protector.Protect(request.AccessKey.Trim());
         config.SecretKeyProtegida = _protector.Protect(request.SecretKey.Trim());
-        config.PublicBaseUrl = request.PublicBaseUrl?.Trim().TrimEnd('/');
+        config.PublicBaseUrl = publicBaseUrl;
         config.OficinaSlug = slugOficina;
         config.Ativo = request.Ativo;
         config.AtualizadoEm = BlakBox.Api.Models.RelogioSistema.Agora;
@@ -85,6 +114,7 @@ public sealed class ArmazenamentoController : ControllerBase
             slug = slug[..63].TrimEnd('-');
         return string.IsNullOrWhiteSpace(slug) ? "oficina" : slug;
     }
+
 }
 
 public sealed class ConfiguracaoR2Request

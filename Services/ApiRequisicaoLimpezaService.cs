@@ -95,9 +95,7 @@ public class ApiRequisicaoLimpezaService
         CancellationToken cancellationToken)
     {
         var limite =
-            DateTime.SpecifyKind(
-                DateTime.UtcNow.AddDays(-DiasRetencao),
-                DateTimeKind.Unspecified);
+            DateTime.UtcNow.AddDays(-DiasRetencao);
 
         var totalRemovido = 0;
 

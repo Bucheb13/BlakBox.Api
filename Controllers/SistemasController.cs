@@ -21,7 +21,7 @@ public class SistemasController : ControllerBase
      * LISTAR SISTEMAS ATIVOS
      * ============================================================
      *
-     * Utilizado pelo OficinaWeb durante a configuração inicial.
+     * Utilizado pelo BlakBox.Torque durante a configuração inicial.
      */
     [HttpGet]
     public async Task<IActionResult> ListarAtivos()

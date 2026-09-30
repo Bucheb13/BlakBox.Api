@@ -11,7 +11,7 @@ public class Licenca
     public int LicencaId { get; set; }
 
     /*
-     * Mantido por compatibilidade com a OficinaWeb atual.
+     * Mantido por compatibilidade com a BlakBox.Torque atual.
      */
     [Required]
     [MaxLength(50)]

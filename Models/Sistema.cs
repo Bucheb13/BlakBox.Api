@@ -23,13 +23,6 @@ public class Sistema
     [Range(0, 3650)]
     public int DiasTolerancia { get; set; } = 5;
 
-    /*
-     * Quantos dias o aplicativo pode permanecer
-     * sem conseguir validar com o servidor.
-     */
-    [Range(0, 3650)]
-    public int DiasOffline { get; set; } = 5;
-
     public DateTime CriadoEm { get; set; } = RelogioSistema.Agora;
 
     public ICollection<Instalacao> Instalacoes { get; set; }

@@ -254,10 +254,7 @@ public class ApiMonitoramentoMiddleware
                 var requisicao =
                     new ApiRequisicao
                     {
-                        DataHora =
-                            DateTime.SpecifyKind(
-                                DateTime.UtcNow,
-                                DateTimeKind.Unspecified),
+                        DataHora = DateTime.UtcNow,
 
                         Metodo =
                             metodo,
@@ -377,13 +374,6 @@ public class ApiMonitoramentoMiddleware
         if (!string.IsNullOrWhiteSpace(
             userAgent))
         {
-            if (userAgent.Contains(
-                "OficinaWeb",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                return "OficinaWeb";
-            }
-
             if (userAgent.Contains(
                 "BlakBox",
                 StringComparison.OrdinalIgnoreCase))

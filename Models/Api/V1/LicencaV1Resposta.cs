@@ -60,5 +60,4 @@ public class LicencaResposta
 
     public int DiasTolerancia { get; set; }
 
-public int DiasOffline { get; set; }
 }

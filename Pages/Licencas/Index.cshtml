@@ -13,24 +13,6 @@
 
 <div class="licencas">
 
-    <div class="topbar">
-
-        <div class="topbar-inner">
-
-            <div>
-                <h1>
-                    Painel de Licenciamento
-                </h1>
-
-                <span>
-                    Administração central do BlakBox
-                </span>
-            </div>
-
-        </div>
-
-    </div>
-
     <main class="container">
 
         <div class="header">
@@ -258,10 +240,6 @@
                                 </th>
 
                                 <th>
-                                    Uso offline
-                                </th>
-
-                                <th>
                                     Ações
                                 </th>
 
@@ -483,7 +461,7 @@
 
                                     </td>
 
-                                    <td class="offline">
+                                    <td class="valida-ate">
 
                                         @if (licenca.ValidaAte.HasValue)
                                         {
@@ -499,34 +477,6 @@
                                         {
                                             <span class="sem-plano">
                                                 Definida ao ativar a licença
-                                            </span>
-                                        }
-
-                                    </td>
-
-                                    <td class="offline">
-
-                                        @if (licenca.Instalacao?.Sistema is { } sistema)
-                                        {
-                                            <strong>
-                                                @sistema.DiasOffline dia(s) sem validar
-                                            </strong>
-
-                                            <span class="subtexto">
-                                                @if (licenca.UltimaValidacao.HasValue)
-                                                {
-                                                    <text>Última validação: @licenca.UltimaValidacao.Value.ToString("dd/MM/yyyy HH:mm")</text>
-                                                }
-                                                else
-                                                {
-                                                    <text>Começa após a primeira validação online</text>
-                                                }
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="sem-plano">
-                                                Configuração do sistema indisponível
                                             </span>
                                         }
 
@@ -762,10 +712,7 @@
                 A data de início é definida somente na primeira ativação e não pode
                 ser alterada. A renovação respeita o plano atual. A licença permanece
                 liberada até a data exibida em “Tolerância após vencimento”, calculada
-                conforme os dias de tolerância configurados no sistema. “Uso offline”
-                mostra por quanto tempo o aplicativo pode ficar sem validar com a API;
-                esse prazo é independente da tolerância comercial e usa os dias offline
-                e a última validação registrados para o sistema/instalação.
+                conforme os dias de tolerância configurados no sistema.
             </p>
 
             <p>
