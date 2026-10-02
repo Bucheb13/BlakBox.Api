@@ -1,0 +1,428 @@
+@page "/orcamento/{token}"
+@model BlakBox.Api.Pages.Orcamento.IndexModel
+@{
+    Layout = null;
+    var quote = Model.Orcamento!;
+
+    var whatsappNumber = new string(
+        (quote.OficinaTelefone ?? string.Empty)
+            .Where(char.IsDigit)
+            .ToArray());
+
+    if (whatsappNumber.Length is 10 or 11)
+    {
+        whatsappNumber = "55" + whatsappNumber;
+    }
+    else if (whatsappNumber.StartsWith('0') && whatsappNumber.Length is 11 or 12)
+    {
+        whatsappNumber = "55" + whatsappNumber[1..];
+    }
+
+    var whatsappUrl =
+        whatsappNumber.StartsWith("55", StringComparison.Ordinal) &&
+        whatsappNumber.Length is 12 or 13
+            ? $"https://wa.me/{whatsappNumber}?text={Uri.EscapeDataString($"Olá, gostaria de conversar sobre o orçamento da OS #{quote.OrdemServicoId}.")}"
+            : null;
+
+    var oficinaInicial =
+        string.IsNullOrWhiteSpace(quote.Oficina)
+            ? "B"
+            : quote.Oficina.Trim()[..1].ToUpperInvariant();
+
+    var status =
+        string.IsNullOrWhiteSpace(quote.Status)
+            ? "Em análise"
+            : quote.Status.Trim();
+
+    var statusClass = status.ToLowerInvariant() switch
+    {
+        "aberta" => "status-open",
+        "aberto" => "status-open",
+        "em andamento" => "status-progress",
+        "andamento" => "status-progress",
+        "aguardando" => "status-waiting",
+        "aguardando aprovação" => "status-waiting",
+        "aprovado" => "status-approved",
+        "concluída" => "status-completed",
+        "concluida" => "status-completed",
+        "concluído" => "status-completed",
+        "concluido" => "status-completed",
+        "cancelada" => "status-cancelled",
+        "cancelado" => "status-cancelled",
+        _ => "status-default"
+    };
+}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#f5f7fb" />
+    <title>Orçamento OS #@quote.OrdemServicoId — @quote.Oficina</title>
+
+    <link rel="stylesheet"
+          href="~/css/orcamento-publico.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+    <main class="quote-page">
+
+        <!-- =========================================================
+             CABEÇALHO
+             ========================================================= -->
+        <header class="brand-bar">
+
+            <div class="brand-identity">
+                <div class="brand-mark" aria-hidden="true">
+                    @oficinaInicial
+                </div>
+
+                <div class="brand-copy">
+                    <span class="eyebrow">Orçamento enviado por</span>
+                    <strong>@quote.Oficina</strong>
+                </div>
+            </div>
+
+            <div class="order-meta">
+                <div class="order-number">
+                    OS #@quote.OrdemServicoId
+                </div>
+
+                <div class="order-status @statusClass">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>@status</span>
+                </div>
+
+                <div class="order-date">
+                    <span class="label">Emitido em</span>
+                    <strong>@quote.DataEmissao.ToString("dd/MM/yyyy")</strong>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- =========================================================
+             CONTEÚDO
+             ========================================================= -->
+        <div class="quote-layout">
+
+            <article class="quote-main">
+
+                <!-- =================================================
+                     INTRODUÇÃO
+                     ================================================= -->
+                <section class="intro">
+                    <div>
+                        <span class="eyebrow">Proposta de serviço</span>
+                        <h1>Seu orçamento</h1>
+                        <p>
+                            Confira os serviços e peças previstos para o seu veículo.
+                        </p>
+                    </div>
+                </section>
+
+
+                <!-- =================================================
+                     CLIENTE
+                     ================================================= -->
+                <section class="data-card" aria-label="Dados do cliente">
+
+                    <div class="data-card-header">
+                        <span class="section-icon" aria-hidden="true">01</span>
+                        <h2>Cliente</h2>
+                    </div>
+
+                    <div class="data-grid client-grid">
+
+                        <div class="info-block">
+                            <span class="label">Nome</span>
+                            <strong>@quote.Cliente</strong>
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(quote.ClienteTelefone))
+                        {
+                            <div class="info-block">
+                                <span class="label">Telefone</span>
+                                <strong>@quote.ClienteTelefone</strong>
+                            </div>
+                        }
+
+                    </div>
+                </section>
+
+
+                <!-- =================================================
+                     VEÍCULO
+                     ================================================= -->
+                @if (!string.IsNullOrWhiteSpace(quote.Veiculo) ||
+                     !string.IsNullOrWhiteSpace(quote.Placa) ||
+                     quote.VeiculoAno.HasValue ||
+                     !string.IsNullOrWhiteSpace(quote.VeiculoCor) ||
+                     quote.Kilometragem.HasValue)
+                {
+                    <section class="data-card vehicle-card" aria-label="Dados do veículo">
+
+                        <div class="data-card-header">
+                            <span class="section-icon" aria-hidden="true">02</span>
+                            <h2>Veículo</h2>
+                        </div>
+
+                        <div class="data-grid vehicle-grid">
+
+                            @if (!string.IsNullOrWhiteSpace(quote.Veiculo))
+                            {
+                                <div class="info-block vehicle-name">
+                                    <span class="label">Veículo</span>
+                                    <strong>@quote.Veiculo</strong>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(quote.Placa))
+                            {
+                                <div class="info-block">
+                                    <span class="label">Placa</span>
+                                    <strong class="plate">@quote.Placa</strong>
+                                </div>
+                            }
+
+                            @if (quote.VeiculoAno.HasValue)
+                            {
+                                <div class="info-block">
+                                    <span class="label">Ano</span>
+                                    <strong>@quote.VeiculoAno</strong>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(quote.VeiculoCor))
+                            {
+                                <div class="info-block">
+                                    <span class="label">Cor</span>
+                                    <strong>@quote.VeiculoCor</strong>
+                                </div>
+                            }
+
+                            @if (quote.Kilometragem.HasValue)
+                            {
+                                <div class="info-block">
+                                    <span class="label">Quilometragem</span>
+                                    <strong>
+                                        @quote.Kilometragem.Value.ToString("N0") km
+                                    </strong>
+                                </div>
+                            }
+
+                        </div>
+                    </section>
+                }
+
+
+                <!-- =================================================
+                     DESCRIÇÃO
+                     ================================================= -->
+                @if (!string.IsNullOrWhiteSpace(quote.Descricao))
+                {
+                    <section class="description-card">
+                        <span class="label">Descrição do serviço</span>
+                        <p>@quote.Descricao</p>
+                    </section>
+                }
+
+
+                <!-- =================================================
+                     PEÇAS E SERVIÇOS
+                     ================================================= -->
+                <section class="items-section">
+
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">Detalhamento</span>
+                            <h2>Peças e serviços</h2>
+                        </div>
+
+                        <span class="item-count">
+                            @quote.Itens.Count @(quote.Itens.Count == 1 ? "item" : "itens")
+                        </span>
+                    </div>
+
+
+                    <!-- DESKTOP / TABLET -->
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th class="number">Qtd.</th>
+                                    <th class="number">Unitário</th>
+                                    <th class="number">Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            @foreach (var item in quote.Itens)
+                            {
+                                <tr>
+                                    <td class="description-cell">
+                                        @item.Descricao
+                                    </td>
+
+                                    <td class="number">
+                                        @item.Quantidade
+                                    </td>
+
+                                    <td class="number">
+                                        R$ @item.ValorUnitario.ToString("N2")
+                                    </td>
+
+                                    <td class="number line-total">
+                                        R$ @item.Total.ToString("N2")
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!-- CELULAR -->
+                    <div class="mobile-items" aria-label="Itens do orçamento">
+
+                        @foreach (var item in quote.Itens)
+                        {
+                            <article class="mobile-item">
+
+                                <div class="mobile-item-top">
+                                    <strong class="mobile-item-description">
+                                        @item.Descricao
+                                    </strong>
+
+                                    <strong class="mobile-item-total">
+                                        R$ @item.Total.ToString("N2")
+                                    </strong>
+                                </div>
+
+                                <div class="mobile-item-bottom">
+
+                                    <span>
+                                        <small>Quantidade</small>
+                                        <strong>@item.Quantidade</strong>
+                                    </span>
+
+                                    <span>
+                                        <small>Unitário</small>
+                                        <strong>
+                                            R$ @item.ValorUnitario.ToString("N2")
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </article>
+                        }
+
+                    </div>
+
+                </section>
+
+            </article>
+
+
+            <!-- =====================================================
+                 RESUMO
+                 ===================================================== -->
+            <aside class="summary-card" aria-label="Resumo do orçamento">
+
+                <div class="summary-heading">
+
+                    <span class="summary-icon" aria-hidden="true">
+                        ✓
+                    </span>
+
+                    <div>
+                        <span class="eyebrow">Resumo</span>
+                        <h2>Investimento</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="total-row">
+                    <span>Peças e serviços</span>
+                    <strong>
+                        R$ @quote.TotalPecas.ToString("N2")
+                    </strong>
+                </div>
+
+
+                @if (quote.Desconto > 0)
+                {
+                    <div class="total-row discount">
+                        <span>Desconto</span>
+                        <strong>
+                            − R$ @quote.Desconto.ToString("N2")
+                        </strong>
+                    </div>
+                }
+
+
+                <div class="grand-total">
+                    <span>Total do orçamento</span>
+
+                    <strong>
+                        R$ @quote.Total.ToString("N2")
+                    </strong>
+                </div>
+
+
+                <p class="summary-note">
+                    Os valores correspondem aos itens detalhados nesta proposta.
+                </p>
+
+
+                <div class="quote-actions">
+
+                    <a class="download-button"
+                       href="?handler=Baixar"
+                       data-download>
+                        <span aria-hidden="true">↓</span>
+                        Baixar orçamento em PDF
+                    </a>
+
+                    @if (!string.IsNullOrWhiteSpace(whatsappUrl))
+                    {
+                        <a class="whatsapp-button"
+                           href="@whatsappUrl"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            <span aria-hidden="true">◉</span>
+                            Falar pelo WhatsApp
+                        </a>
+                    }
+
+                </div>
+
+
+                <span class="secure-note">
+                    Documento disponibilizado por @quote.Oficina
+                </span>
+
+            </aside>
+
+        </div>
+
+
+        <footer class="page-footer">
+            Em caso de dúvidas, entre em contato com @quote.Oficina.
+        </footer>
+
+    </main>
+
+
+    <script src="~/js/orcamento-publico.js"
+            asp-append-version="true"
+            defer></script>
+
+</body>
+</html>
